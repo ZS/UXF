@@ -1,6 +1,11 @@
 UXF
 ===
 
-user experience foundation styles
+Introduction
+------------
+UXF (or User Experience Foundation) is the central repository of standardized front-end web assets for ZS applications.
 
-This can eventually have useful info.
+UXF can serve up:
+- Images
+- Styles
+- Scripts
