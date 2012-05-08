@@ -54,7 +54,7 @@
         }
     };
 
-    $.fn.ZSToolTip = function (options) {
+    $.fn.ZSTooltip = function (options) {
         var localOptions, elem, classes, cls;
 
         return this.each(function () {
