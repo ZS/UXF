@@ -1,0 +1,9 @@
+﻿.zs-tooltip{font-family:Arial,Helvetica,Sans-Serif;font-size:1em;background-color:#fff;border:solid 1px #3577c9;padding:10px 11px;-moz-box-shadow:0 2px 5px #888;-webkit-box-shadow:0 2px 5px #888;box-shadow:0 2px 5px #888}
+.zs-tooltip .ui-tooltip-titlebar{background-color:#fff;border-width:0 0 1px 0;border-bottom:1px solid #ccc;padding:0 0 5px 0;margin-bottom:5px}
+.zs-tooltip .ui-tooltip-titlebar .ui-tooltip-title{font-size:1.3em;font-weight:normal;color:#666}
+.zs-tooltip .ui-tooltip-content{background-color:#fff;border-width:0;padding:0;color:#333}
+.zs-tooltip .ui-tooltip-tip{background-color:#3577c9;border-color:#3577c9}
+.zs-tooltip-warning{border-color:#f90}
+.zs-tooltip-warning .ui-tooltip-tip{background-color:#f90;border-color:#f90}
+.zs-tooltip-error{border-color:#c00}
+.zs-tooltip-error .ui-tooltip-tip{background-color:#c00;border-color:#c00}
