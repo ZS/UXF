@@ -107,7 +107,7 @@ ul.action-list em {
 /*= Action Box 
 /*************************************************************************/
 .action-box {
-	background: #FCFCEE url(images/bg-rightcolumn.png) repeat-x scroll 0 0; 
+	background: #FCFCEE url(../img/bg-rightcolumn.png) repeat-x scroll 0 0; 
 	border: 1px solid #E9E991;
 	width: 180px;
 	padding: 0 15px;		
@@ -127,7 +127,7 @@ ul.last-set.action-list {
 /*************************************************************************/
 ul.link-menu li {
 	display: inline;
-	background: url(images/divider.gif) center right no-repeat;
+	background: url(../img/divider.gif) center right no-repeat;
 	margin-right: 10px;
 	padding-right: 8px;
 }
@@ -147,7 +147,7 @@ ul.linkbutton-menu li {
 /*= Navigation header, tabs, and breadcrumbs
 /*************************************************************************/
 #top-nav #top-nav-main {
-	background: #306BB5 url(images/javelin-header-bg.gif) 100% 0 repeat-x;
+	background: #306BB5 url(../img/javelin-header-bg.gif) 100% 0 repeat-x;
 	height: 60px;
 	color: #FFF;
 	position: relative;
@@ -171,7 +171,7 @@ ul.linkbutton-menu li {
 #top-nav #top-nav-main li {
 	display: inline-block;
 	border: 1px solid #274E7F;
-	background: #749ED1 url(images/nav-tab-bg.gif) 100% -100px no-repeat;
+	background: #749ED1 url(../img/nav-tab-bg.gif) 100% -100px no-repeat;
 	/* Setting a negative right margin collapses the tabs so that they are 1px apart instead of 3px
 	margin-right: -2px;
 	*/
@@ -179,7 +179,7 @@ ul.linkbutton-menu li {
 
 #top-nav #top-nav-main li a {
 	display: block;
-	background: #749ED1 url(images/nav-tab-bg.gif) 0 -100px no-repeat;
+	background: #749ED1 url(../img/nav-tab-bg.gif) 0 -100px no-repeat;
 	color: #FFF;
 	padding: 6px 20px 6px 19px;
 	text-align: center;
@@ -207,7 +207,7 @@ ul.linkbutton-menu li {
 
 #top-nav #top-nav-sub {
 	position: relative;
-	background: #eee url(images/nav-subheader-bg.gif) 0 100% repeat-x;
+	background: #eee url(../img/nav-subheader-bg.gif) 0 100% repeat-x;
 	color: #666;
 	/* The 9em padding on the right side is to provide space for the
 	absolute-positioned Help and About links
@@ -219,7 +219,7 @@ ul.breadcrumb li {
 	display: inline;
 	margin-right: 7px;
 	padding-right: 11px;
-	background: url(images/breadcrumb-arrow.gif) center right no-repeat;
+	background: url(../img/breadcrumb-arrow.gif) center right no-repeat;
 }
 
 ul.breadcrumb li.current {
@@ -278,7 +278,7 @@ ul.breadcrumb li.current {
 /*= Floating container
 /*************************************************************************/
 div.floating-container {
-	background-image: url(images/floating-container-bg.jpg);
+	background-image: url(../img/floating-container-bg.jpg);
 	background-repeat: repeat-x;
 	background-position: 0 0;
 	border: 1px solid #E3E3E3;
@@ -334,11 +334,11 @@ div.anchored-footer {
 	bottom: 0;
 	height: 5.5em;
 	overflow: hidden;
-	background: #F5F5F5 url(images/anchored-footer-bg.gif) repeat-x;
+	background: #F5F5F5 url(../img/anchored-footer-bg.gif) repeat-x;
 }
 
 div.anchored-footer.highlight {
-    background: #FFFFCC url(images/anchored-footer-highlight-bg.gif) repeat-x;
+    background: #FFFFCC url(../img/anchored-footer-highlight-bg.gif) repeat-x;
 }
 
 div.anchored-footer input.button,
@@ -397,25 +397,25 @@ div.anchored-footer div.message-list-container ul.message-list li p {
 /* Status classes */
 div.anchored-footer ul.message-list.status-error,
 div.anchored-footer ul.message-list li.status-error {
-    background: url(images/error.gif) center left no-repeat;
+    background: url(../img/error.gif) center left no-repeat;
     padding-left: 20px;
 }
 
 div.anchored-footer ul.message-list.status-warning,
 div.anchored-footer ul.message-list li.status-warning {
-    background: url(images/warning.gif) center left no-repeat;
+    background: url(../img/warning.gif) center left no-repeat;
     padding-left: 20px;
 }
 
 div.anchored-footer ul.message-list.status-unknown,
 div.anchored-footer ul.message-list li.status-unknown {
-    background: url(images/unknown.gif) center left no-repeat;
+    background: url(../img/unknown.gif) center left no-repeat;
     padding-left: 20px;
 }
 
 div.anchored-footer ul.message-list.status-ok,
 div.anchored-footer ul.message-list li.status-ok {
-    background: url(images/ok.gif) center left no-repeat;
+    background: url(../img/ok.gif) center left no-repeat;
     padding-left: 20px;
 }
 
@@ -498,7 +498,7 @@ table.table-pager td span {
 }
 
 table.table-pager td span {
-	background: #FFFFCD url(images/yellow-gradiant-top-down-bg) repeat-x;
+	background: #FFFFCD url(../img/yellow-gradiant-top-down-bg) repeat-x;
 	color: #727206;
 	border: 1px solid #DDD;
 	border-color: #CCCC33;
