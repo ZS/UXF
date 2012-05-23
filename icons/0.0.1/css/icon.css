@@ -12,6 +12,7 @@
     *zoom: 1;
 }
 
+
 .icon-add { background-position: 0 0; }
 .icon-add:hover { background-position: -66px 0; }
 .icon-calendar { background-position: -132px 0; }
