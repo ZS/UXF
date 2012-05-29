@@ -1,4 +1,4 @@
-<link href="http://github.com/zs/uxf/icons/1.0.0/css/icons.css" type="text/css" rel="stylesheet"></link>
+<link href="https://raw.github.com/ZS/UXF/master/icons/1.0.0/css/icon.css" type="text/css" rel="stylesheet"></link>
 
 Icons 1.0.0
 ===========
