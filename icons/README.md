@@ -12,11 +12,20 @@ Icons have several use cases:
     
 *   **Toggle icons** - Clicking these icons toggles the icon "on" and "off".  For example, you may want to use the ``lock`` or ``star`` icons as toggles.
 
-    **Note:** You will need to write your own toggle behavior logic; it is not provided by this package.
+    **Note:** You will need to write your own toggle behavior logic; only the icon graphics are provided in this package.
 
 Usage
 -----
-The icons are implemented in a single sprite sheet for efficiency.  As a result, you will not reference an individual icon directly, but instead add an icon class to your appropriate DOM element.  For example, if you need a "delete" action in your page:
+The icons are implemented in a single sprite sheet for efficiency.  As a result, you will not reference an individual icon directly, but instead add an icon class to your appropriate DOM element.
+
+### Getting started
+1.  Link to ``icons.css`` in your page header.
+```html
+<link rel="stylesheet" type="text/css" href="<base URL/icons/1.0.0/css/icons.css">
+```
+
+2.  Add the icon class to your desired DOM element.
 ```html
 <a href="#" class="icon-delete" title="Delete">Delete</a>
 ```
+
