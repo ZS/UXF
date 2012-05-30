@@ -13,10 +13,15 @@ The icons are implemented in a single sprite sheet for efficiency.  As a result,
 ```
 
 Icons have several use cases:
-*   **Push-button actions**
+*   __Push-button actions__
+
     Clicking these icons will perform an action.  For example, ``delete``, ``close``, ``duplicate``, or ``preview``.
+    
 *   **Static icons**
+
     These icons are displayed as-is, or optionally with a tooltip.  For example, ``error``, ``warning``, or ``info``.
+    
 *   **Toggle icons**
+
     Clicking these icons toggles the icon "on" and "off".  For example, you may want to use the ``lock`` or ``star`` icons as toggles.
-    **Note:** the logic to control toggle icons is not provided by this package.  You will need to write your own toggle logic.
+    **Note:** You will need to write your own toggle behavior logic; it is not provided by this package.
