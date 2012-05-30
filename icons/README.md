@@ -32,10 +32,10 @@ The icons are implemented in a single sprite sheet for efficiency.  As a result,
 
 ### Best practices
 *   Include descriptive text inside your icon DOM element.  This text will not be displayed on the screen, but text- and e-readers will pick it up.  For example, this icon will be displayed as "purple monkey dishwasher" in an e-reader:
-    ```html
-    <a href="#" class="icon-delete">Purple Monkey Dishwasher</a>
-    ```
+```html
+<a href="#" class="icon-delete">Purple Monkey Dishwasher</a>
+```
 *   Add a descriptive tooltip over the icon.  This gives a hint to the user about what clicking the icon will do, if anything.
-    ```html
-    <a href="#" class="icon-delete" title="Click to delete this row">Delete</a>
-    ```
+```html
+<a href="#" class="icon-delete" title="Click to delete this row">Delete</a>
+```
