@@ -36,7 +36,7 @@ The icons are implemented in a single sprite sheet for efficiency.  As a result,
 <a href="#" class="icon-delete">purple monkey dishwasher</a>
 ```
 
-*   Add a descriptive tooltip over the icon.  This gives a hint to the user about what clicking the icon will do, if anything.
+*   Add a descriptive tooltip over the icon.  This gives a hint to the user about what clicking the icon will do, if anything.  You can use the "title" attribute for the native browser tooltip, or you can use the UXF Tooltip package.
 ```html
 <a href="#" class="icon-delete" title="Click to delete this row">Delete</a>
 ```
