@@ -3,7 +3,4 @@ Icons 1.0.0
 
 Usage
 -----
-
-```
-<a href="PerformAction();" class="icon-error" title="Error">Error</a>
-```
+    <a href="#" class="icon-error" title="Error">Error</a>
