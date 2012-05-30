@@ -21,7 +21,7 @@ The icons are implemented in a single sprite sheet for efficiency.  As a result,
 ### Getting started
 1.  Link to ``icons.css`` in your page header.
 ```html
-<link rel="stylesheet" type="text/css" href="<your UXF base URL>/icons/1.0.0/css/icons.css">
+<link rel="stylesheet" type="text/css" href="``your UXF base URL``/icons/1.0.0/css/icons.css">
 ```
 
 2.  Add the icon class to your desired DOM element.
