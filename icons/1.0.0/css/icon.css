@@ -40,7 +40,7 @@
 .icon-info-nohover { background-position: -1782px 0; }
 .icon-lock { background-position: -1848px 0; }
 .icon-lock:hover { background-position: -1914px 0; }
-.icon-ok { background-position: -264px 0; }
+.icon-ok , .icon-ok-nohover { background-position: -264px 0; }
 .icon-ok:hover { background-position: -330px 0; }
 .icon-search { background-position: 0 -66px; }
 .icon-search:hover { background-position: -66px -66px; }

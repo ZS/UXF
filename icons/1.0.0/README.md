@@ -1,8 +1,5 @@
-Icons 1.0.0
-===========
+Icons 1.0.0 Release Notes
+=========================
 
-Usage
------
-```html
-<a href="#" class="icon-error" title="Error">Error</a>
-```
+* Initial version of most common 24 icons.
+* Includes no-hover classes for Error, Info, Ok, and Warning.
