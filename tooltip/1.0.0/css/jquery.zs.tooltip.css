@@ -1,4 +1,10 @@
-﻿/* Default, or "info" tooltip styling */
+﻿/*
+* ZS Tooltip styles
+* Overrides the base qTip2 styles
+* Author: Alan Kendall
+*/
+
+/* Default, or "info" tooltip styling */
 .zs-tooltip {
   font-family: Arial, Helvetica, Sans-Serif;
   font-size: 1em;

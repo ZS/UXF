@@ -9,14 +9,22 @@
 *   http://en.wikipedia.org/wiki/MIT_License
 *   http://en.wikipedia.org/wiki/GNU_General_Public_License
 *
-* Date: Tue Jan 31 10:16:34.0000000000 2012
+* Date: Tue May 29 11:43:26.0000000000 2012
 */
 
 /*jslint browser: true, onevar: true, undef: true, nomen: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
-/*global window: false, jQuery: false, console: false */
+/*global window: false, jQuery: false, console: false, define: false */
 
-
-(function($, window, undefined) {
+// Uses AMD or browser globals to create a jQuery plugin.
+(function(factory) {
+	if(typeof define === 'function' && define.amd) {
+		define(['jquery'], factory);
+	}
+	else {
+		factory(jQuery);
+	}
+}
+(function($) {
 
 	"use strict"; // Enable ECMAScript "strict" operation for this function. See more: http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/
 	
@@ -24,6 +32,7 @@
 	var TRUE = true,
 		FALSE = false,
 		NULL = null,
+		undefined,
 		
 		// Shortcut vars
 		QTIP, PLUGINS, MOUSE,
@@ -143,7 +152,7 @@ function sanitizeOptions(opts)
 	$.each(PLUGINS, function() {
 		if(this.sanitize) { this.sanitize(opts); }
 	});
-	
+
 	return opts;
 }
 
@@ -165,6 +174,7 @@ function QTip(target, options, id, attr)
 	// Setup class attributes
 	self.id = id;
 	self.rendered = FALSE;
+	self.destroyed = FALSE;
 	self.elements = elements = { target: target };
 	self.timers = { img: {} };
 	self.options = options;
@@ -183,7 +193,7 @@ function QTip(target, options, id, attr)
 	*/
 	function convertNotation(notation)
 	{
-		var i = 0, obj, option = options, 
+		var i = 0, obj, option = options,
 
 		// Split notation into array
 		levels = notation.split('.');
@@ -199,9 +209,9 @@ function QTip(target, options, id, attr)
 	function setWidget() {
 		var on = options.style.widget;
 
-		tooltip.toggleClass(widget, on).toggleClass(defaultClass, options.style['default'] && !on);
+		tooltip.toggleClass(widget, on).toggleClass(defaultClass, options.style.def && !on);
 		elements.content.toggleClass(widget+'-content', on);
-		
+
 		if(elements.titlebar){
 			elements.titlebar.toggleClass(widget+'-header', on);
 		}
@@ -291,7 +301,7 @@ function QTip(target, options, id, attr)
 		if(options.content.title.button) { createButton(); }
 
 		// Redraw the tooltip dimensions if it's rendered
-		else if(self.rendered){ self.redraw(); } 
+		else if(self.rendered){ self.redraw(); }
 	}
 
 	function updateButton(button)
@@ -325,8 +335,8 @@ function QTip(target, options, id, attr)
 			content = content.call(target, cache.event, self);
 		}
 
-		// Remove title if callback returns false
-		if(content === FALSE) { return removeTitle(FALSE); }
+		// Remove title if callback returns false or null/undefined (but not '')
+		if(content === FALSE || (!content && content !== '')) { return removeTitle(FALSE); }
 
 		// Append new content if its a DOM array and show it if hidden
 		else if(content.jquery && content.length > 0) {
@@ -338,7 +348,7 @@ function QTip(target, options, id, attr)
 
 		// Redraw and reposition
 		self.redraw();
-		if(reposition !== FALSE && self.rendered && tooltip.is(':visible')) {
+		if(reposition !== FALSE && self.rendered && tooltip[0].offsetWidth > 0) {
 			self.reposition(cache.event);
 		}
 	}
@@ -381,33 +391,32 @@ function QTip(target, options, id, attr)
 					if(reposition !== FALSE) {
 						self.reposition(cache.event);
 					}
-					
+
 					next();
 				}
 			}
 
 			// Find all content images without dimensions, and if no images were found, continue
-			if((images = elem.find('img:not([height]):not([width])')).length === 0) { return imageLoad(); }
+			if((images = elem.find('img[src]:not([height]):not([width])')).length === 0) { return imageLoad(); }
 
 			// Apply timer to each image to poll for dimensions
 			images.each(function(i, elem) {
 				// Skip if the src is already present
 				if(srcs[elem.src] !== undefined) { return; }
 
-        // Keep track of how many times we poll for image dimensions.
-        // If it doesn't return in a reasonable amount of time, it's better
-        // to display the tooltip, rather than hold up the queue.
-        var iterations = 0, maxIterations = 3;
+				// Keep track of how many times we poll for image dimensions.
+				// If it doesn't return in a reasonable amount of time, it's better
+				// to display the tooltip, rather than hold up the queue.
+				var iterations = 0, maxIterations = 3;
 
 				(function timer(){
 					// When the dimensions are found, remove the image from the queue
 					if(elem.height || elem.width || (iterations > maxIterations)) { return imageLoad(elem); }
 
-          iterations += 1;
-
-					// Restart timer
+					// Increase iterations and restart timer
+					iterations += 1;
 					self.timers.img[elem.src] = setTimeout(timer, 700);
-				}());  
+				}());
 
 				// Also apply regular load/error event handlers
 				$(elem).bind('error'+namespace+' load'+namespace, function(){ imageLoad(this); });
@@ -501,7 +510,7 @@ function QTip(target, options, id, attr)
 		}
 
 		function repositionMethod(event) {
-			if(tooltip.is(':visible')) { self.reposition(event); }
+			if(self.rendered && tooltip[0].offsetWidth > 0) { self.reposition(event); }
 		}
 
 		// On mouseenter/mouseleave...
@@ -548,11 +557,14 @@ function QTip(target, options, id, attr)
 
 		// Hide tooltip on document mousedown if unfocus events are enabled
 		if(('' + options.hide.event).indexOf('unfocus') > -1) {
-			targets.body.bind('mousedown'+namespace, function(event) {
-				var $target = $(event.target),
-					enabled = !tooltip.hasClass(disabled) && tooltip.is(':visible');
+			posOptions.container.closest('html').bind('mousedown'+namespace, function(event) {
+				var elem = $(event.target),
+					enabled = self.rendered && !tooltip.hasClass(disabled) && tooltip[0].offsetWidth > 0,
+					isAncestor = elem.parents(selector).filter(tooltip[0]).length > 0;
 
-				if($target[0] !== tooltip[0] && $target.parents(selector).length === 0 && $target.add(target).length > 1 && !$target.attr('disabled')) {
+				if(elem[0] !== target[0] && elem[0] !== tooltip[0] && !isAncestor &&
+					!target.has(elem[0]).length && !elem.attr('disabled')
+				) {
 					self.hide(event);
 				}
 			});
@@ -562,7 +574,7 @@ function QTip(target, options, id, attr)
 		if('number' === typeof options.hide.inactive) {
 			// Bind inactive method to target as a custom event
 			targets.show.bind('qtip-'+id+'-inactive', inactiveMethod);
-			
+
 			// Define events which reset the 'inactive' event handler
 			$.each(QTIP.inactiveEvents, function(index, type){
 				targets.hide.add(elements.tooltip).bind(type+namespace+'-inactive', inactiveMethod);
@@ -578,7 +590,7 @@ function QTip(target, options, id, attr)
 			if((showIndex > -1 && targetHide.add(targets.show).length === targetHide.length) || type === 'unfocus')
 			{
 				targets.show.bind(type+namespace, function(event) {
-					if(tooltip.is(':visible')) { hideMethod(event); }
+					if(tooltip[0].offsetWidth > 0) { hideMethod(event); }
 					else { showMethod(event); }
 				});
 
@@ -635,7 +647,7 @@ function QTip(target, options, id, attr)
 				// Update tooltip position on mousemove
 				targets.document.bind('mousemove'+namespace, function(event) {
 					// Update the tooltip position only if the tooltip is visible and adjustment is enabled
-					if(cache.onTarget && !tooltip.hasClass(disabled) && tooltip.is(':visible')) {
+					if(self.rendered && cache.onTarget && !tooltip.hasClass(disabled) && tooltip[0].offsetWidth > 0) {
 						self.reposition(event || MOUSE);
 					}
 				});
@@ -718,7 +730,7 @@ function QTip(target, options, id, attr)
 		},
 
 		// Style checks
-		'^style.classes$': function(obj, o, v) { 
+		'^style.classes$': function(obj, o, v) {
 			tooltip.attr('class', uitooltip + ' qtip ui-helper-reset ' + v);
 		},
 		'^style.widget|content.title': setWidget,
@@ -788,7 +800,7 @@ function QTip(target, options, id, attr)
 			isDrawing = 1; isPositioning = 1;
 
 			// Create title...
-			if(title) { 
+			if(title) {
 				createTitle();
 
 				// Update title only if its not a callback (called in toggle if so)
@@ -925,7 +937,7 @@ function QTip(target, options, id, attr)
 			isPositioning = isDrawing = 1; $.each(option, callback); isPositioning = isDrawing = 0;
 
 			// Update position / redraw if needed
-			if(tooltip.is(':visible') && self.rendered) {
+			if(self.rendered && tooltip[0].offsetWidth > 0) {
 				if(reposition) {
 					self.reposition( options.position.target === 'mouse' ? NULL : cache.event );
 				}
@@ -942,12 +954,13 @@ function QTip(target, options, id, attr)
 
 			var type = state ? 'show' : 'hide',
 				opts = options[type],
-				visible = tooltip.is(':visible'),
-				sameTarget = !event || options[type].target.length < 2 || cache.target[0] === event.target,
+				otherOpts = options[ !state ? 'show' : 'hide' ],
 				posOptions = options.position,
 				contentOptions = options.content,
-				delay,
-				callback;
+				visible = tooltip[0].offsetWidth > 0,
+				animate = state || opts.target.length === 1,
+				sameTarget = !event || opts.target.length < 2 || cache.target[0] === event.target,
+				delay, callback;
 
 			// Detect state if valid one isn't provided
 			if((typeof state).search('boolean|number')) { state = !visible; }
@@ -958,7 +971,8 @@ function QTip(target, options, id, attr)
 			// Try to prevent flickering when tooltip overlaps show element
 			if(event) {
 				if((/over|enter/).test(event.type) && (/out|leave/).test(cache.event.type) &&
-					event.target === options.show.target[0] && tooltip.has(event.relatedTarget).length) {
+					options.show.target.add(event.target).length === options.show.target.length &&
+					tooltip.has(event.relatedTarget).length) {
 					return self;
 				}
 
@@ -1002,7 +1016,7 @@ function QTip(target, options, id, attr)
 				if((callback.solo = !!opts.solo)) { $(selector, opts.solo).not(tooltip).qtip('hide', callback); }
 			}
 			else {
-				// Clear show timer if we're hiding 
+				// Clear show timer if we're hiding
 				clearTimeout(self.timers.show);
 
 				// Remove cached origin on hide
@@ -1013,7 +1027,7 @@ function QTip(target, options, id, attr)
 					$(document).unbind('mousemove.qtip');
 					trackingBound = FALSE;
 				}
-				
+
 				// Blur the tooltip
 				self.blur(event);
 			}
@@ -1032,11 +1046,6 @@ function QTip(target, options, id, attr)
 						$(opts.autofocus, tooltip).focus();
 					}
 
-					// Call API method
-					callback = $.Event('tooltipvisible');
-					callback.originalEvent = event ? cache.event : NULL;
-					tooltip.trigger(callback, [self]);
-
 					// If set, hide tooltip when inactive for delay period
 					opts.target.trigger('qtip-'+id+'-inactive');
 				}
@@ -1050,19 +1059,22 @@ function QTip(target, options, id, attr)
 						top: ''
 					});
 				}
+
+				// Call API method
+				callback = $.Event('tooltip'+(state ? 'visible' : 'hidden'));
+				callback.originalEvent = event ? cache.event : NULL;
+				tooltip.trigger(callback, [self]);
 			}
 
-			// Clear animation queue if same target
-			if(sameTarget) { tooltip.stop(0, 1); }
-
 			// If no effect type is supplied, use a simple toggle
-			if(opts.effect === FALSE) {
+			if(opts.effect === FALSE || animate === FALSE) {
 				tooltip[ type ]();
 				after.call(tooltip);
 			}
 
 			// Use custom function if provided
 			else if($.isFunction(opts.effect)) {
+				tooltip.stop(1, 1);
 				opts.effect.call(tooltip, self);
 				tooltip.queue('fx', function(n){ after(); n(); });
 			}
@@ -1108,7 +1120,7 @@ function QTip(target, options, id, attr)
 								this.style.zIndex = this.style.zIndex - 1;
 							}
 						});
-						
+
 						// Fire blur event for focused tooltip
 						qtips.filter('.' + focusClass).qtip('blur', cachedEvent);
 					}
@@ -1142,10 +1154,10 @@ function QTip(target, options, id, attr)
 
 			// Set positioning flag
 			isPositioning = 1;
-	
+
 			var target = options.position.target,
 				posOptions = options.position,
-				my = posOptions.my, 
+				my = posOptions.my,
 				at = posOptions.at,
 				adjust = posOptions.adjust,
 				method = adjust.method.split(' '),
@@ -1160,15 +1172,17 @@ function QTip(target, options, id, attr)
 				container = posOptions.container,
 				flipoffset = FALSE,
 				tip = self.plugins.tip,
+				visible = tooltip[0].offsetWidth > 0,
 				readjust = {
 					// Axis detection and readjustment indicator
 					horizontal: method[0],
 					vertical: (method[1] = method[1] || method[0]),
 					enabled: viewport.jquery && target[0] !== window && target[0] !== docBody && adjust.method !== 'none',
-			 
+
 					// Reposition methods
 					left: function(posLeft) {
 						var isShift = readjust.horizontal === 'shift',
+							adjustx = adjust.x * (readjust.horizontal.substr(-6) === 'invert' ? 2 : 0),
 							viewportScroll = -container.offset.left + viewport.offset.left + viewport.scrollLeft,
 							myWidth = my.x === 'left' ? elemWidth : my.x === 'right' ? -elemWidth : -elemWidth / 2,
 							atWidth = at.x === 'left' ? targetWidth : at.x === 'right' ? -targetWidth : -targetWidth / 2,
@@ -1199,13 +1213,12 @@ function QTip(target, options, id, attr)
 						// Default 'flip' repositioning
 						else {
 							if(overflowLeft > 0 && (my.x !== 'left' || overflowRight > 0)) {
-								position.left -= offset;
+								position.left -= offset + adjustx;
 							}
 							else if(overflowRight > 0 && (my.x !== 'right' || overflowLeft > 0)  ) {
-								position.left -= isCenter ? -offset : offset;
+								position.left -= (isCenter ? -offset : offset) + adjustx;
 							}
-							if(position.left !== posLeft && isCenter) { position.left -= adjust.x; }
-							
+
 							// Make sure we haven't made things worse with the adjustment and return the adjusted difference
 							if(position.left < viewportScroll && -position.left > overflowRight) { position.left = posLeft; }
 						}
@@ -1214,6 +1227,7 @@ function QTip(target, options, id, attr)
 					},
 					top: function(posTop) {
 						var isShift = readjust.vertical === 'shift',
+							adjusty = adjust.y * (readjust.vertical.substr(-6) === 'invert' ? 2 : 0),
 							viewportScroll = -container.offset.top + viewport.offset.top + viewport.scrollTop,
 							myHeight = my.y === 'top' ? elemHeight : my.y === 'bottom' ? -elemHeight : -elemHeight / 2,
 							atHeight = at.y === 'top' ? targetHeight : at.y === 'bottom' ? -targetHeight : -targetHeight / 2,
@@ -1223,7 +1237,7 @@ function QTip(target, options, id, attr)
 							overflowBottom = posTop + elemHeight - viewport.height - viewportScroll + tipAdjust,
 							offset = myHeight - (my.precedance === 'y' || my.x === my.y ? atHeight : 0) - (at.y === 'center' ? targetHeight / 2 : 0),
 							isCenter = my.y === 'center';
-							
+
 						// Optional 'shift' style repositioning
 						if(isShift) {
 							tipAdjust = tip && tip.corner && tip.corner.precedance === 'x' ? tipHeight : 0;
@@ -1244,13 +1258,11 @@ function QTip(target, options, id, attr)
 						// Default 'flip' repositioning
 						else {
 							if(overflowTop > 0 && (my.y !== 'top' || overflowBottom > 0)) {
-								position.top -= offset;
+								position.top -= offset + adjusty;
 							}
 							else if(overflowBottom > 0 && (my.y !== 'bottom' || overflowTop > 0)  ) {
-								console.log('test');
-								position.top -= isCenter ? -offset : offset;
+								position.top -= (isCenter ? -offset : offset) + adjusty;
 							}
-							if(position.top !== posTop && isCenter) { position.top -= adjust.y; }
 
 							// Make sure we haven't made things worse with the adjustment and return the adjusted difference
 							if(position.top < 0 && -position.top > overflowBottom) { position.top = posTop; }
@@ -1339,8 +1351,11 @@ function QTip(target, options, id, attr)
 					position = position.offset;
 				}
 
-				// Adjust for position.fixed tooltips (and also iOS scroll bug in v3.2 - v4.0)
-				if((PLUGINS.iOS < 4.1 && PLUGINS.iOS > 3.1) || PLUGINS.iOS == 4.3 || (!PLUGINS.iOS && fixed)) {
+				// Adjust for position.fixed tooltips (and also iOS scroll bug in v3.2-4.0 & v4.3-4.3.2)
+				if((PLUGINS.iOS > 3.1 && PLUGINS.iOS < 4.1) || 
+					(PLUGINS.iOS >= 4.3 && PLUGINS.iOS < 4.33) || 
+					(!PLUGINS.iOS && fixed)
+				){
 					win = $(window);
 					position.left -= win.scrollLeft();
 					position.top -= win.scrollTop();
@@ -1399,10 +1414,10 @@ function QTip(target, options, id, attr)
 			delete position.adjusted;
 
 			// If effect is disabled, target it mouse, no animation is defined or positioning gives NaN out, set CSS directly
-			if(effect === FALSE || isNaN(position.left) || isNaN(position.top) || target === 'mouse' || !$.isFunction(posOptions.effect)) {
+			if(effect === FALSE || !visible || isNaN(position.left) || isNaN(position.top) || target === 'mouse' || !$.isFunction(posOptions.effect)) {
 				tooltip.css(position);
 			}
-			
+
 			// Use custom function if provided
 			else if($.isFunction(posOptions.effect)) {
 				posOptions.effect.call(tooltip, self, $.extend({}, position));
@@ -1473,7 +1488,7 @@ function QTip(target, options, id, attr)
 			if('boolean' !== typeof state) {
 				state = !(tooltip.hasClass(disabled) || cache.disabled);
 			}
-			 
+
 			if(self.rendered) {
 				tooltip.toggleClass(disabled, state);
 				$.attr(tooltip[0], 'aria-disabled', state);
@@ -1484,7 +1499,7 @@ function QTip(target, options, id, attr)
 
 			return self;
 		},
-		
+
 		enable: function() { return self.disable(FALSE); },
 
 		destroy: function()
@@ -1493,10 +1508,13 @@ function QTip(target, options, id, attr)
 				title = $.attr(t, oldtitle),
 				elemAPI = target.data('qtip');
 
+			// Set flag the signify destroy is taking place to plugins
+			self.destroyed = TRUE;
+
 			// Destroy tooltip and  any associated plugins if rendered
 			if(self.rendered) {
-				tooltip.remove();
-				
+				tooltip.stop(1,0).remove();
+
 				$.each(self.plugins, function() {
 					if(this.destroy) { this.destroy(); }
 				});
@@ -1559,14 +1577,14 @@ function init(id, opts)
 	catch(e) { log('Unable to parse HTML5 attribute data: ' + html5); }
 
 	// Merge in and sanitize metadata
-	config = $.extend(TRUE, {}, QTIP.defaults, opts, 
+	config = $.extend(TRUE, {}, QTIP.defaults, opts,
 		typeof html5 === 'object' ? sanitizeOptions(html5) : NULL,
 		sanitizeOptions(metadata5 || metadata));
 
 	// Re-grab our positioning options now we've merged our metadata and set id to passed value
 	posOptions = config.position;
 	config.id = id;
-	
+
 	// Setup missing content if none is detected
 	if('boolean' === typeof config.content.text) {
 		attr = elem.attr(config.content.attr);
@@ -1585,9 +1603,12 @@ function init(id, opts)
 	if(!posOptions.container.length) { posOptions.container = docBody; }
 	if(posOptions.target === FALSE) { posOptions.target = newTarget; }
 	if(config.show.target === FALSE) { config.show.target = newTarget; }
-	if(config.show.solo === TRUE) { config.show.solo = docBody; }
+	if(config.show.solo === TRUE) { config.show.solo = posOptions.container.closest('body'); }
 	if(config.hide.target === FALSE) { config.hide.target = newTarget; }
 	if(config.position.viewport === TRUE) { config.position.viewport = posOptions.container; }
+
+	// Ensure we only use a single container
+	posOptions.container = posOptions.container.eq(0);
 
 	// Convert position corner values into x and y strings
 	posOptions.at = new PLUGINS.Corner(posOptions.at);
@@ -1605,15 +1626,16 @@ function init(id, opts)
 
 	// Remove title attribute and store it if present
 	if(config.suppress && (title = $.attr(this, 'title'))) {
-		$(this).removeAttr('title').attr(oldtitle, title);
+		// Final attr call fixes event delegatiom and IE default tooltip showing problem
+		$(this).removeAttr('title').attr(oldtitle, title).attr('title', '');
 	}
 
 	// Initialize the tooltip and add API reference
 	obj = new QTip(elem, config, id, !!attr);
 	$.data(this, 'qtip', obj);
 
-	// Catch remove events on target element to destroy redundant tooltip
-	elem.bind('remove.qtip-'+id, function(){ obj.destroy(); });
+	// Catch remove/removeqtip events on target element to destroy redundant tooltip
+	elem.bind('remove.qtip-'+id+' removeqtip.qtip-'+id, function(){ obj.destroy(); });
 
 	return obj;
 }
@@ -1769,7 +1791,7 @@ PLUGINS = QTIP.plugins = {
 		var f = corner.charAt(0); this.precedance = (f === 't' || f === 'b' ? 'y' : 'x');
 
 		this.string = function() { return this.precedance === 'y' ? this.y+this.x : this.x+this.y; };
-		this.abbrev = function() { 
+		this.abbrev = function() {
 			var x = this.x.substr(0,1), y = this.y.substr(0,1);
 			return x === y ? x : (x === 'c' || (x !== 'c' && y !== 'c')) ? y + x : x + y;
 		};
@@ -1782,9 +1804,8 @@ PLUGINS = QTIP.plugins = {
 	// Custom (more correct for qTip!) offset calculator
 	offset: function(elem, container) {
 		var pos = elem.offset(),
-			parent = container,
-			deep = 0,
-			docBody = document.body,
+			docBody = elem.closest('body')[0],
+			parent = container, scrolled,
 			coffset, overflow;
 
 		function scroll(e, i) {
@@ -1796,36 +1817,33 @@ PLUGINS = QTIP.plugins = {
 			// Compensate for non-static containers offset
 			do {
 				if(parent.css('position') !== 'static') {
-					coffset = parent[0] === docBody ?
-						{ left: parseInt(parent.css('left'), 10) || 0, top: parseInt(parent.css('top'), 10) || 0 } :
-						parent.position();
+					coffset = parent.position();
 
+					// Account for element positioning, borders and margins
 					pos.left -= coffset.left + (parseInt(parent.css('borderLeftWidth'), 10) || 0) + (parseInt(parent.css('marginLeft'), 10) || 0);
-					pos.top -= coffset.top + (parseInt(parent.css('borderTopWidth'), 10) || 0);
+					pos.top -= coffset.top + (parseInt(parent.css('borderTopWidth'), 10) || 0) + (parseInt(parent.css('marginTop'), 10) || 0);
 
-					overflow = parent.css('overflow');
-					if(overflow === 'scroll' || overflow === 'auto') { deep++; }
+					// If this is the first parent element with an overflow of "scroll" or "auto", store it
+					if(!scrolled && (overflow = parent.css('overflow')) !== 'hidden' && overflow !== 'visible') { scrolled = parent; }
 				}
-				
-				if(parent[0] === docBody) { break; }
 			}
-			while(parent = parent.offsetParent());
+			while((parent = $(parent[0].offsetParent)).length);
 
 			// Compensate for containers scroll if it also has an offsetParent
-			if(container[0] !== docBody && deep) { scroll( container, 1 ); }
+			if(scrolled && scrolled[0] !== docBody) { scroll( scrolled, 1 ); }
 		}
 
 		return pos;
 	},
-	
+
 	/*
 	 * iOS 3.2 - 4.0 scroll fix detection used in offset() function.
 	 */
-	iOS: parseFloat(
-		('' + (/CPU.*OS ([0-9_]{1,3})|(CPU like).*AppleWebKit.*Mobile/i.exec(navigator.userAgent) || [0,''])[1])
-			.replace('undefined', '3_2').replace('_','.')
+	iOS: parseFloat( 
+		('' + (/CPU.*OS ([0-9_]{1,5})|(CPU like).*AppleWebKit.*Mobile/i.exec(navigator.userAgent) || [0,''])[1])
+		.replace('undefined', '3_2').replace('_', '.').replace('_', '')
 	) || FALSE,
-	
+
 	/*
 	 * jQuery-specific $.fn overrides
 	 */
@@ -1855,7 +1873,7 @@ PLUGINS = QTIP.plugins = {
 
 			return $.fn['attr'+replaceSuffix].apply(this, arguments);
 		},
-		
+
 		/* Allow clone to correctly retrieve cached title attributes */
 		clone: function(keepData) {
 			var titles = $([]), title = 'title',
@@ -1872,24 +1890,6 @@ PLUGINS = QTIP.plugins = {
 			}
 
 			return elems;
-		},
-
-		/* 
-		 * Taken directly from jQuery 1.8.2 widget source code
-		 * Trigger 'remove' event on all elements on removal
-		 */
-		remove: $.ui ? NULL : function( selector, keepData ) {
-			if($.ui) { return; } // We don't need to do this if jQuery UI is present!
-
-			$(this).each(function() {
-				if (!keepData) {
-					if (!selector || $.filter( selector, [ this ] ).length) {
-						$('*', this).add(this).each(function() {
-							$(this).triggerHandler('remove');
-						});
-					}
-				}
-			});
 		}
 	}
 };
@@ -1897,12 +1897,27 @@ PLUGINS = QTIP.plugins = {
 // Apply the fn overrides above
 $.each(PLUGINS.fn, function(name, func) {
 	if(!func || $.fn[name+replaceSuffix]) { return TRUE; }
-	
+
 	var old = $.fn[name+replaceSuffix] = $.fn[name];
 	$.fn[name] = function() {
 		return func.apply(this, arguments) || old.apply(this, arguments);
 	};
 });
+
+/* Fire off 'removeqtip' handler in $.cleanData if jQuery UI not present (it already does similar).
+ * This snippet is taken directly from jQuery UI source code found here:
+ *     http://code.jquery.com/ui/jquery-ui-git.js
+ */
+if(!$.ui) {
+	$['cleanData'+replaceSuffix] = $.cleanData;
+	$.cleanData = function( elems ) {
+		for(var i = 0, elem; (elem = elems[i]) !== undefined; i++) {
+			try { $( elem ).triggerHandler('removeqtip'); }
+			catch( e ) {}
+		}
+		$['cleanData'+replaceSuffix]( elems );
+	};
+}
 
 // Set global qTip properties
 QTIP.version = 'nightly';
@@ -1967,7 +1982,7 @@ QTIP.defaults = {
 		widget: FALSE,
 		width: FALSE,
 		height: FALSE,
-		'default': TRUE
+		def: TRUE
 	},
 	events: {
 		render: NULL,
@@ -1976,6 +1991,7 @@ QTIP.defaults = {
 		hide: NULL,
 		toggle: NULL,
 		visible: NULL,
+		hidden: NULL,
 		focus: NULL,
 		blur: NULL
 	}
@@ -1986,9 +2002,12 @@ function Ajax(api)
 	var self = this,
 		tooltip = api.elements.tooltip,
 		opts = api.options.content.ajax,
+		defaults = QTIP.defaults.content.ajax,
 		namespace = '.qtip-ajax',
 		rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-		first = TRUE;
+		first = TRUE,
+		stop = FALSE,
+		xhr;
 
 	api.checks.ajax = {
 		'^content.ajax': function(obj, name, v) {
@@ -2017,17 +2036,22 @@ function Ajax(api)
 			return self;
 		},
 
-		load: function(event, first) {
+		load: function(event) {
+			if(stop) {stop = FALSE; return; }
+
 			var hasSelector = opts.url.indexOf(' '),
 				url = opts.url,
 				selector,
-				hideFirst = opts.once && !opts.loading && first;
+				hideFirst = !opts.loading && first;
 
 			// If loading option is disabled, prevent the tooltip showing until we've completed the request
 			if(hideFirst) { try{ event.preventDefault(); } catch(e) {} }
 
 			// Make sure default event hasn't been prevented
 			else if(event && event.isDefaultPrevented()) { return self; }
+
+			// Cancel old request
+			if(xhr && xhr.abort) { xhr.abort(); }
 			
 			// Check if user delcared a content selector like in .load()
 			if(hasSelector > -1) {
@@ -2037,15 +2061,30 @@ function Ajax(api)
 
 			// Define common after callback for both success/error handlers
 			function after() {
-				// Re-display tip if loading and first time, and reset first flag
-				if(hideFirst) { api.show(event.originalEvent); first = FALSE; }
+				var complete;
 
-				// Call users complete if it was defined
-				if($.isFunction(opts.complete)) { opts.complete.apply(this, arguments); }
+				// Don't proceed if tooltip is destroyed
+				if(api.destroyed) { return; }
+
+				// Set first flag to false
+				first = FALSE;
+
+				// Re-display tip if loading and first time, and reset first flag
+				if(hideFirst) { stop = TRUE; api.show(event.originalEvent); }
+
+				// Call users complete method if it was defined
+				if((complete = defaults.complete || opts.complete) && $.isFunction(complete)) {
+					complete.apply(opts.context || api, arguments);
+				}
 			}
 
 			// Define success handler
-			function successHandler(content) {
+			function successHandler(content, status, jqXHR) {
+				var success;
+
+				// Don't proceed if tooltip is destroyed
+				if(api.destroyed) { return; }
+
 				if(selector) {
 					// Create a dummy div to hold the results and grab the selector element
 					content = $('<div/>')
@@ -2057,18 +2096,37 @@ function Ajax(api)
 						.find(selector);
 				}
 
-				// Set the content
-				api.set('content.text', content);
+				// Call the success function if one is defined
+				if((success = defaults.success || opts.success) && $.isFunction(success)) {
+					success.call(opts.context || api, content, status, jqXHR);
+				}
+
+				// Otherwise set the content
+				else { api.set('content.text', content); }
 			}
 
 			// Error handler
-			function errorHandler(xh, status, error) {
-				if (xh.status === 0) { return; }
+			function errorHandler(xhr, status, error) {
+				if(api.destroyed || xhr.status === 0) { return; }
 				api.set('content.text', status + ': ' + error);
 			}
 
 			// Setup $.ajax option object and process the request
-			$.ajax( $.extend({ success: successHandler, error: errorHandler, context: api }, opts, { url: url, complete: after }) );
+			xhr = $.ajax(
+				$.extend({
+					error: defaults.error || errorHandler,
+					context: api
+				},
+				opts, { url: url, success: successHandler, complete: after })
+			);
+		},
+
+		destroy: function() {
+			// Cancel ajax request if possible
+			if(xhr && xhr.abort) { xhr.abort(); }
+
+			// Set api.destroyed flag
+			api.destroyed = TRUE;
 		}
 	});
 
@@ -2105,149 +2163,6 @@ $.extend(TRUE, QTIP.defaults, {
 		}
 	}
 });
-
-PLUGINS.imagemap = function(area, corner, flip)
-{
-	if(!area.jquery) { area = $(area); }
-
-	var shape = (area[0].shape || area.attr('shape')).toLowerCase(),
-		baseCoords = (area[0].coords || area.attr('coords')).split(','),
-		coords = [],
-		image = $('img[usemap="#'+area.parent('map').attr('name')+'"]'),
-		imageOffset = image.offset(),
-		result = {
-			width: 0, height: 0,
-			offset: { top: 1e10, right: 0, bottom: 0, left: 1e10 }
-		},
-		i = 0, next = 0, dimensions;
-
-	// POLY area coordinate calculator
-	//	Special thanks to Ed Cradock for helping out with this.
-	//	Uses a binary search algorithm to find suitable coordinates.
-	function polyCoordinates(result, coords, corner)
-	{
-		var i = 0,
-			compareX = 1, compareY = 1,
-			realX = 0, realY = 0,
-			newWidth = result.width,
-			newHeight = result.height;
-
-		// Use a binary search algorithm to locate most suitable coordinate (hopefully)
-		while(newWidth > 0 && newHeight > 0 && compareX > 0 && compareY > 0)
-		{
-			newWidth = Math.floor(newWidth / 2);
-			newHeight = Math.floor(newHeight / 2);
-
-			if(corner.x === 'left'){ compareX = newWidth; }
-			else if(corner.x === 'right'){ compareX = result.width - newWidth; }
-			else{ compareX += Math.floor(newWidth / 2); }
-
-			if(corner.y === 'top'){ compareY = newHeight; }
-			else if(corner.y === 'bottom'){ compareY = result.height - newHeight; }
-			else{ compareY += Math.floor(newHeight / 2); }
-
-			i = coords.length; while(i--)
-			{
-				if(coords.length < 2){ break; }
-
-				realX = coords[i][0] - result.offset.left;
-				realY = coords[i][1] - result.offset.top;
-
-				if((corner.x === 'left' && realX >= compareX) ||
-				(corner.x === 'right' && realX <= compareX) ||
-				(corner.x === 'center' && (realX < compareX || realX > (result.width - compareX))) ||
-				(corner.y === 'top' && realY >= compareY) ||
-				(corner.y === 'bottom' && realY <= compareY) ||
-				(corner.y === 'center' && (realY < compareY || realY > (result.height - compareY)))) {
-					coords.splice(i, 1);
-				}
-			}
-		}
-
-		return { left: coords[0][0], top: coords[0][1] };
-	}
-
-	// Make sure we account for padding and borders on the image
-	imageOffset.left += Math.ceil((image.outerWidth() - image.width()) / 2);
-	imageOffset.top += Math.ceil((image.outerHeight() - image.height()) / 2);
-
-	// Parse coordinates into proper array
-	if(shape === 'poly') {
-		i = baseCoords.length; while(i--)
-		{
-			next = [ parseInt(baseCoords[--i], 10), parseInt(baseCoords[i+1], 10) ];
-
-			if(next[0] > result.offset.right){ result.offset.right = next[0]; }
-			if(next[0] < result.offset.left){ result.offset.left = next[0]; }
-			if(next[1] > result.offset.bottom){ result.offset.bottom = next[1]; }
-			if(next[1] < result.offset.top){ result.offset.top = next[1]; }
-
-			coords.push(next);
-		}
-	}
-	else {
-		coords = $.map(baseCoords, function(coord){ return parseInt(coord, 10); });
-	}
-
-	// Calculate details
-	switch(shape)
-	{
-		case 'rect':
-			result = {
-				width: Math.abs(coords[2] - coords[0]),
-				height: Math.abs(coords[3] - coords[1]),
-				offset: {
-					left: Math.min(coords[0], coords[2]),
-					top: Math.min(coords[1], coords[3])
-				}
-			};
-		break;
-
-		case 'circle':
-			result = {
-				width: coords[2] + 2,
-				height: coords[2] + 2,
-				offset: { left: coords[0], top: coords[1] }
-			};
-		break;
-
-		case 'poly':
-			$.extend(result, {
-				width: Math.abs(result.offset.right - result.offset.left),
-				height: Math.abs(result.offset.bottom - result.offset.top)
-			});
-
-			if(corner.string() === 'centercenter') {
-				result.offset = {
-					left: result.offset.left + (result.width / 2),
-					top: result.offset.top + (result.height / 2)
-				};
-			}
-			else {
-				result.offset = polyCoordinates(result, coords.slice(), corner);
-
-				// If flip adjustment is enabled, also calculate the closest opposite point
-				if(flip && (flip[0] === 'flip' || flip[1] === 'flip')) {
-					result.flipoffset = polyCoordinates(result, coords.slice(), {
-						x: corner.x === 'left' ? 'right' : corner.x === 'right' ? 'left' : 'center',
-						y: corner.y === 'top' ? 'bottom' : corner.y === 'bottom' ? 'top' : 'center'
-					});
-
-					result.flipoffset.left -= result.offset.left;
-					result.flipoffset.top -= result.offset.top;
-				}
-			}
-
-			result.width = result.height = 0;
-		break;
-	}
-
-	// Add image position to offset coordinates
-	result.offset.left += imageOffset.left;
-	result.offset.top += imageOffset.top;
-
-	return result;
-};
 
 // Tip coordinates calculator
 function calculateTip(corner, width, height)
@@ -2320,11 +2235,22 @@ function Tip(qTip, command)
 			qTip.reposition();
 		},
 		'^content.title.text|style.(classes|widget)$': function() {
-			if(elems.tip) {
+			if(elems.tip && elems.tip.length) {
 				self.update();
 			}
 		}
 	};
+
+	function swapDimensions() {
+		var temp = size.width;
+		size.width = size.height;
+		size.height = temp;
+	}
+
+	function resetDimensions() {
+		size.width = opts.width;
+		size.height = opts.height;
+	}
 
 	function reposition(event, api, pos, viewport) {
 		if(!elems.tip) { return; }
@@ -2337,13 +2263,13 @@ function Tip(qTip, command)
 			shift = { left: FALSE, top: FALSE, x: 0, y: 0 },
 			offset, css = {}, props;
 
-		// Make sure our tip position isn't fixed e.g. doesn't adjust with viewport
+		// If our tip position isn't fixed e.g. doesn't adjust with viewport...
 		if(self.corner.fixed !== TRUE) {
 			// Horizontal - Shift or flip method
 			if(horizontal === 'shift' && newCorner.precedance === 'x' && adjust.left && newCorner.y !== 'center') {
 				newCorner.precedance = newCorner.precedance === 'x' ? 'y' : 'x';
 			}
-			else if(horizontal === 'flip' && adjust.left){
+			else if(horizontal !== 'shift' && adjust.left){
 				newCorner.x = newCorner.x === 'center' ? (adjust.left > 0 ? 'left' : 'right') : (newCorner.x === 'left' ? 'right' : 'left');
 			}
 
@@ -2351,7 +2277,7 @@ function Tip(qTip, command)
 			if(vertical === 'shift' && newCorner.precedance === 'y' && adjust.top && newCorner.x !== 'center') {
 				newCorner.precedance = newCorner.precedance === 'y' ? 'x' : 'y';
 			}
-			else if(vertical === 'flip' && adjust.top) {
+			else if(vertical !== 'shift' && adjust.top) {
 				newCorner.y = newCorner.y === 'center' ? (adjust.top > 0 ? 'top' : 'bottom') : (newCorner.y === 'top' ? 'bottom' : 'top');
 			}
 
@@ -2363,6 +2289,10 @@ function Tip(qTip, command)
 
 		// Setup tip offset properties
 		offset = self.position(newCorner, adjust);
+		offset[ newCorner.x ] += borderWidth(newCorner, newCorner.x, TRUE);
+		offset[ newCorner.y ] += borderWidth(newCorner, newCorner.y, TRUE);
+
+		// Readjust offset object to make it left/top
 		if(offset.right !== undefined) { offset.left = -offset.right; }
 		if(offset.bottom !== undefined) { offset.top = -offset.bottom; }
 		offset.user = Math.max(0, opts.offset);
@@ -2425,7 +2355,7 @@ function Tip(qTip, command)
 		
 		var isFluid = tooltip.hasClass(fluidClass),
 			isTitleTop = elems.titlebar && corner.y === 'top',
-			elem = isTitleTop ? elems.titlebar : elems.content,
+			elem = isTitleTop ? elems.titlebar : elems.tooltip,
 			css = 'border-' + side + '-width',
 			val;
 
@@ -2533,11 +2463,8 @@ function Tip(qTip, command)
 				transparent = 'transparent',
 				important = ' !important',
 
-				bodyBorder = $(document.body).css('color'),
-				contentColour = qTip.elements.content.css('color'),
-
 				useTitle = elems.titlebar && (corner.y === 'top' || (corner.y === 'center' && tip.position().top + (size.height / 2) + opts.offset < elems.titlebar.outerHeight(1))),
-				colorElem = useTitle ? elems.titlebar : elems.content;
+				colorElem = useTitle ? elems.titlebar : elems.tooltip;
 
 			// Apply the fluid class so we can see our CSS values properly
 			tooltip.addClass(fluidClass);
@@ -2553,10 +2480,10 @@ function Tip(qTip, command)
 					color.fill = tooltip.css(backgroundColor) || fill;
 				}
 			}
-			if(!border || invalid.test(border) || border === bodyBorder) {
+			if(!border || invalid.test(border) || border === $(document.body).css('color')) {
 				color.border = colorElem.css(borderSide) || transparent;
-				if(invalid.test(color.border)) {
-					color.border = border;
+				if(invalid.test(color.border) || color.border === colorElem.css('color')) {
+					color.border = tooltip.css(borderSide) || tooltip.css(borderSideCamel) || border;
 				}
 			}
 
@@ -2624,11 +2551,21 @@ function Tip(qTip, command)
 			}
 			precedance = mimic.precedance;
 
+			// Ensure the tip width.height are relative to the tip position
+			if(corner.precedance === 'x') { swapDimensions(); }
+			else { resetDimensions(); }
+
+			// Set the tip dimensions
+			elems.tip.css({
+				width: (width = size.width),
+				height: (height = size.height)
+			});
+
 			// Update our colours
 			self.detectColours(corner);
 
 			// Detect border width, taking into account colours
-			if(color.border !== 'transparent' && color.border !== '#123456') {
+			if(color.border !== 'transparent') {
 				// Grab border width
 				border = borderWidth(corner, NULL, TRUE);
 
@@ -2667,27 +2604,40 @@ function Tip(qTip, command)
 			if(hasCanvas) {
 				// Set the canvas size using calculated size
 				inner.attr(newSize);
-				
+
 				// Grab canvas context and clear/save it
 				context = inner[0].getContext('2d');
 				context.restore(); context.save();
 				context.clearRect(0,0,3000,3000);
-				
+
+				// Set properties
+				context.fillStyle = color.fill;
+				context.strokeStyle = color.border;
+				context.lineWidth = border * 2;
+				context.lineJoin = 'miter';
+				context.miterLimit = 100;
+
 				// Translate origin
 				context.translate(translate[0], translate[1]);
-				
+
 				// Draw the tip
 				context.beginPath();
 				context.moveTo(coords[0][0], coords[0][1]);
 				context.lineTo(coords[1][0], coords[1][1]);
 				context.lineTo(coords[2][0], coords[2][1]);
 				context.closePath();
-				context.fillStyle = color.fill;
-				context.strokeStyle = color.border;
-				context.lineWidth = border * 2;
-				context.lineJoin = 'miter';
-				context.miterLimit = 100;
-				if(border) { context.stroke(); }
+
+				// Apply fill and border
+				if(border) {
+					// Make sure transparent borders are supported by doing a stroke
+					// of the background colour before the stroke colour
+					if(tooltip.css('background-clip') === 'border-box') {
+						context.strokeStyle = color.fill;
+						context.stroke();
+					}
+					context.strokeStyle = color.border;
+					context.stroke();
+				}
 				context.fill();
 			}
 
@@ -2718,7 +2668,7 @@ function Tip(qTip, command)
 						path: coords,
 						fillcolor: color.fill,
 						filled: !!i,
-						stroked: !!!i
+						stroked: !i
 					})
 					.css({ display: border || i ? 'block' : 'none' });
 
@@ -2768,12 +2718,10 @@ function Tip(qTip, command)
 					position['margin-' + b] = -Math.round(dimensions[ precedance === 'y' ? 'width' : 'height' ] / 2) + userOffset;
 				}
 				else {
-					b = borderWidth(corner, side, TRUE);
+					b = borderWidth(corner, side);
 					br = borderRadius(corner);
-					
-					position[ side ] = i ?
-						border ? borderWidth(corner, side) : 0 : 
-						userOffset + (br > b ? br : 0);
+
+					position[ side ] = i ? 0 : (userOffset + (br > b ? br : -b));
 				}
 			});
 
@@ -2787,8 +2735,11 @@ function Tip(qTip, command)
 		
 		destroy: function()
 		{
-			// Remov tip and bound events
+			// Remove the tip element
 			if(elems.tip) { elems.tip.remove(); }
+			elems.tip = false;
+
+			// Unbind events
 			tooltip.unbind(namespace);
 		}
 	});
@@ -2831,335 +2782,6 @@ $.extend(TRUE, QTIP.defaults, {
 			height: 6,
 			border: TRUE,
 			offset: 0
-		}
-	}
-});
-
-PLUGINS.svg = function(svg, corner)
-{
-	var doc = $(document),
-		elem = svg[0],
-		result = {
-			width: 0, height: 0,
-			offset: { top: 1e10, left: 1e10 }
-		},
-		box, mtx, root, point, tPoint;
-
-	if (elem.getBBox && elem.parentNode) {
-		box = elem.getBBox();
-		mtx = elem.getScreenCTM();
-		root = elem.farthestViewportElement || elem;
-
-		// Return if no method is found
-		if(!root.createSVGPoint) { return result; }
-
-		// Create our point var
-		point = root.createSVGPoint();
-
-		// Adjust top and left
-		point.x = box.x;
-		point.y = box.y;
-		tPoint = point.matrixTransform(mtx);
-		result.offset.left = tPoint.x;
-		result.offset.top = tPoint.y;
-
-		// Adjust width and height
-		point.x += box.width;
-		point.y += box.height;
-		tPoint = point.matrixTransform(mtx);
-		result.width = tPoint.x - result.offset.left;
-		result.height = tPoint.y - result.offset.top;
-
-		// Adjust by scroll offset
-		result.offset.left += doc.scrollLeft();
-		result.offset.top += doc.scrollTop();
-	}
-
-	return result;
-};
-
-function Modal(api)
-{
-	var self = this,
-		options = api.options.show.modal,
-		elems = api.elements,
-		tooltip = elems.tooltip,
-		overlaySelector = '#qtip-overlay',
-		globalNamespace = '.qtipmodal',
-		namespace = globalNamespace + api.id,
-		attr = 'is-modal-qtip',
-		docBody = $(document.body),
-		overlay;
-
-	// Setup option set checks
-	api.checks.modal = {
-		'^show.modal.(on|blur)$': function() {
-			// Initialise
-			self.init();
-			
-			// Show the modal if not visible already and tooltip is visible
-			elems.overlay.toggle( tooltip.is(':visible') );
-		}
-	};
-
-	$.extend(self, {
-		init: function()
-		{
-			// If modal is disabled... return
-			if(!options.on) { return self; }
-
-			// Create the overlay if needed
-			overlay = self.create();
-
-			// Add unique attribute so we can grab modal tooltips easily via a selector
-			tooltip.attr(attr, TRUE)
-
-			// Set z-index
-			.css('z-index', PLUGINS.modal.zindex + $(selector+'['+attr+']').length)
-			
-			// Remove previous bound events in globalNamespace
-			.unbind(globalNamespace).unbind(namespace)
-
-			// Apply our show/hide/focus modal events
-			.bind('tooltipshow'+globalNamespace+' tooltiphide'+globalNamespace, function(event, api, duration) {
-				var oEvent = event.originalEvent;
-
-				// Make sure mouseout doesn't trigger a hide when showing the modal and mousing onto backdrop
-				if(event.target === tooltip[0]) {
-					if(oEvent && event.type === 'tooltiphide' && /mouse(leave|enter)/.test(oEvent.type) && $(oEvent.relatedTarget).closest(overlay[0]).length) {
-						try { event.preventDefault(); } catch(e) {}
-					}
-					else if(!oEvent || (oEvent && !oEvent.solo)) {
-						self[ event.type.replace('tooltip', '') ](event, duration);
-					}
-				}
-			})
-
-			// Adjust modal z-index on tooltip focus
-			.bind('tooltipfocus'+globalNamespace, function(event) {
-				// If focus was cancelled before it reearch us, don't do anything
-				if(event.isDefaultPrevented() || event.target !== tooltip[0]) { return; }
-
-				var qtips = $(selector).filter('['+attr+']'),
-
-				// Keep the modal's lower than other, regular qtips
-				newIndex = PLUGINS.modal.zindex + qtips.length,
-				curIndex = parseInt(tooltip[0].style.zIndex, 10);
-
-				// Set overlay z-index
-				overlay[0].style.zIndex = newIndex - 1;
-
-				// Reduce modal z-index's and keep them properly ordered
-				qtips.each(function() {
-					if(this.style.zIndex > curIndex) {
-						this.style.zIndex -= 1;
-					}
-				});
-
-				// Fire blur event for focused tooltip
-				qtips.end().filter('.' + focusClass).qtip('blur', event.originalEvent);
-
-				// Set the new z-index
-				tooltip.addClass(focusClass)[0].style.zIndex = newIndex;
-
-				// Prevent default handling
-				try { event.preventDefault(); } catch(e) {}
-			})
-
-			// Focus any other visible modals when this one hides
-			.bind('tooltiphide'+globalNamespace, function(event) {
-				if(event.target === tooltip[0]) {
-					$('[' + attr + ']').filter(':visible').not(tooltip).last().qtip('focus', event);
-				}
-			});
-
-			// Apply keyboard "Escape key" close handler
-			if(options.escape) {
-				$(window).unbind(namespace).bind('keydown'+namespace, function(event) {
-					if(event.keyCode === 27 && tooltip.hasClass(focusClass)) {
-						api.hide(event);
-					}
-				});
-			}
-
-			// Apply click handler for blur option
-			if(options.blur) {
-				elems.overlay.unbind(namespace).bind('click'+namespace, function(event) {
-					if(tooltip.hasClass(focusClass)) { api.hide(event); }
-				});
-			}
-
-			return self;
-		},
-
-		create: function()
-		{
-			var elem = $(overlaySelector);
-
-			// Return if overlay is already rendered
-			if(elem.length) {
-				// Modal overlay should always be below all tooltips if possible
-				return (elems.overlay = elem.insertAfter( $(selector).last() ));
-			}
-
-			// Create document overlay
-			overlay = elems.overlay = $('<div />', {
-				id: overlaySelector.substr(1),
-				html: '<div></div>',
-				mousedown: function() { return FALSE; }
-			})
-			.insertAfter( $(selector).last() );
-
-			// Update position on window resize or scroll
-			function resize() {
-				overlay.css({
-					height: $(window).height(),
-					width: $(window).width()
-				});
-			}
-			$(window).unbind(globalNamespace).bind('resize'+globalNamespace, resize);
-			resize(); // Fire it initially too
-
-			return overlay;
-		},
-
-		toggle: function(event, state, duration)
-		{
-			// Make sure default event hasn't been prevented
-			if(event && event.isDefaultPrevented()) { return self; }
-
-			var effect = options.effect,
-				type = state ? 'show': 'hide',
-				visible = overlay.is(':visible'),
-				modals = $('[' + attr + ']').filter(':visible').not(tooltip),
-				zindex;
-
-			// Create our overlay if it isn't present already
-			if(!overlay) { overlay = self.create(); }
-
-			// Prevent modal from conflicting with show.solo, and don't hide backdrop is other modals are visible
-			if((overlay.is(':animated') && visible === state) || (!state && modals.length)) { return self; }
-
-			// State specific...
-			if(state) {
-				// Set position
-				overlay.css({ left: 0, top: 0 });
-
-				// Toggle backdrop cursor style on show
-				overlay.toggleClass('blurs', options.blur);
-
-				// Make sure we can't focus anything outside the tooltip
-				docBody.bind('focusin'+namespace, function(event) {
-					var target = $(event.target),
-						container = target.closest('.qtip'),
-
-					// Determine if input container target is above this
-					targetOnTop = container.length < 1 ? FALSE : 
-						(parseInt(container[0].style.zIndex, 10) > parseInt(tooltip[0].style.zIndex, 10)); 
-
-					// If we're showing a modal, but focus has landed on an input below
-					// this modal, divert focus to the first visible input in this modal
-					if(!targetOnTop && ($(event.target).closest(selector)[0] !== tooltip[0])) {
-						tooltip.find('input:visible').filter(':first').focus();
-					}
-				});
-			}
-			else {
-				// Undelegate focus handler
-				docBody.undelegate('*', 'focusin'+namespace);
-			}
-
-			// Stop all animations
-			overlay.stop(TRUE, FALSE);
-
-			// Use custom function if provided
-			if($.isFunction(effect)) {
-				effect.call(overlay, state);
-			}
-
-			// If no effect type is supplied, use a simple toggle
-			else if(effect === FALSE) {
-				overlay[ type ]();
-			}
-
-			// Use basic fade function
-			else {
-				overlay.fadeTo( parseInt(duration, 10) || 90, state ? 1 : 0, function() {
-					if(!state) { $(this).hide(); }
-				});
-			}
-
-			// Reset position on hide
-			if(!state) {
-				overlay.queue(function(next) {
-					overlay.css({ left: '', top: '' });
-					next();
-				});
-			}
-
-			return self;
-		},
-
-		show: function(event, duration) { return self.toggle(event, TRUE, duration); },
-		hide: function(event, duration) { return self.toggle(event, FALSE, duration); },
-
-		destroy: function()
-		{
-			var delBlanket = overlay;
-
-			if(delBlanket) {
-				// Check if any other modal tooltips are present
-				delBlanket = $('[' + attr + ']').not(tooltip).length < 1;
-
-				// Remove overlay if needed
-				if(delBlanket) {
-					elems.overlay.remove();
-					$(window).unbind(globalNamespace);
-				}
-				else {
-					elems.overlay.unbind(globalNamespace+api.id);
-				}
-
-				// Undelegate focus handler
-				docBody.undelegate('*', 'focusin'+namespace);
-			}
-
-			// Remove bound events
-			return tooltip.removeAttr(attr).unbind(globalNamespace);
-		}
-	});
-
-	self.init();
-}
-
-PLUGINS.modal = function(api) {
-	var self = api.plugins.modal;
-
-	return 'object' === typeof self ? self : (api.plugins.modal = new Modal(api));
-};
-
-// Plugin needs to be initialized on render
-PLUGINS.modal.initialize = 'render';
-
-// Setup sanitiztion rules
-PLUGINS.modal.sanitize = function(opts) {
-	if(opts.show) { 
-		if(typeof opts.show.modal !== 'object') { opts.show.modal = { on: !!opts.show.modal }; }
-		else if(typeof opts.show.modal.on === 'undefined') { opts.show.modal.on = TRUE; }
-	}
-};
-
-// Base z-index for all modal tooltips (use qTip core z-index as a base)
-PLUGINS.modal.zindex = QTIP.zindex + 1000;
-
-// Extend original api defaults
-$.extend(TRUE, QTIP.defaults, {
-	show: {
-		modal: {
-			on: FALSE,
-			effect: TRUE,
-			blur: TRUE,
-			escape: TRUE
 		}
 	}
 });
@@ -3241,4 +2863,4 @@ PLUGINS.bgiframe = function(api)
 PLUGINS.bgiframe.initialize = 'render';
 
 
-}(jQuery, window));
+}));
