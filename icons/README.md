@@ -26,19 +26,19 @@ The icons are implemented in a single sprite sheet for efficiency.  As a result,
 
 2.  Add the icon class to your desired DOM element.
 ```html
-<a href="#" class="icon-delete" title="Delete">Delete</a>
+<a class="icon-delete" title="Delete" href="javascript:void(0)">Delete</a>
 <div class="icon-error" title="Error">Error</div>
 ```
 
 ### Best practices
 *   Include descriptive text inside your icon DOM element.  This text will not be displayed on the screen, but text- and e-readers will pick it up.  For example, this icon will be displayed as "purple monkey dishwasher" in an e-reader:
 ```html
-<a href="#" class="icon-delete">purple monkey dishwasher</a>
+<a class="icon-delete" href="javascript:void(0)">purple monkey dishwasher</a>
 ```
 
 *   Add a descriptive tooltip over the icon.  This gives a hint to the user about what clicking the icon will do, if anything.  You can add the "title" attribute to get the native browser tooltip, or you can use the UXF Tooltip package to get a more iPad-friendly tooltip with advanced formatting options.
 ```html
-<a href="#" class="icon-delete" title="Click to delete this row">Delete</a>
+<a class="icon-delete" title="Click to delete this row" href="javascript:void(0)">Delete</a>
 ```
 
 *   If you are using an ``a`` element that does not link to anything with the href attribute, do not set href to "#".  Instead, use "javascript:void(0)".
