@@ -45,3 +45,33 @@ The icons are implemented in a single sprite sheet for efficiency.  As a result,
 ```html
 <a href="javascript:void(0)" class="icon-ok">Ok</a>
 ```
+
+### Icons and classes provided by this package
+*   ``icon-add``
+*   ``icon-calendar``
+*   ``icon-duplicate``
+*   ``icon-close``
+*   ``icon-delete``
+*   ``icon-download``
+*   ``icon-edit``
+*   ``icon-error``
+*   ``icon-error-nohover``
+*   ``icon-folder-close``
+*   ``icon-folder-open``
+*   ``icon-group``
+*   ``icon-info``
+*   ``icon-info-nohover``
+*   ``icon-lock``
+*   ``icon-ok``
+*   ``icon-ok-nohover``
+*   ``icon-search``
+*   ``icon-star``
+*   ``icon-preview``
+*   ``icon-printer``
+*   ``icon-help``
+*   ``icon-upload``
+*   ``icon-user``
+*   ``icon-warning``
+*   ``icon-warning-nohover``
+*   ``icon-minimize``
+*   ``icon-expand``
