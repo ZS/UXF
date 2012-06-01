@@ -155,3 +155,10 @@
 	.ui-tooltip .ui-tooltip-tip canvas{ top: 0; left: 0; }
 
 
+/* IE9 fix - removes all filters */
+.ui-tooltip:not(.ie9haxors) div.ui-tooltip-content,
+.ui-tooltip:not(.ie9haxors) div.ui-tooltip-titlebar{
+	filter: none;
+	-ms-filter: none;
+}
+
