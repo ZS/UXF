@@ -1,56 +1,62 @@
 @charset "utf-8";
-.icon-add,.icon-back,.icon-back-disabled,.icon-next,.icon-next-disabled,.icon-calendar,.icon-duplicate,.icon-close,.icon-delete,.icon-download,.icon-edit,.icon-error,.icon-error-nohover,.icon-folder-close,.icon-folder-open,.icon-group,.icon-info,.icon-info-nohover,.icon-lock,.icon-ok,.icon-ok-nohover,.icon-search,.icon-star,.icon-preview,.icon-printer,.icon-help,.icon-upload,.icon-user,.icon-warning,.icon-warning-nohover,.icon-minimize,.icon-expand{background:url(../img/icons-common-small.png) no-repeat top left;text-indent:-1999px;overflow:hidden;width:16px;height:16px;display:inline-block;*display:inline;*zoom:1;}
-.icon-add{background-position:0 0;}
-.icon-add:hover{background-position:-66px 0;}
-.icon-back{background-position:0 -96px;width:16px;height:16px;}
-.icon-back:hover{background-position:0 -144px;width:16px;height:16px;}
-.icon-back-disabled{background-position:0 -192px;width:16px;height:16px;}
-.icon-next{background-position:0 -240px;width:16px;height:16px;}
-.icon-next:hover{background-position:0 -288px;width:16px;height:16px;}
-.icon-next-disabled{background-position:0 -336px;width:16px;height:16px;}
-.icon-calendar{background-position:-132px 0;}
-.icon-calendar:hover{background-position:-198px 0;}
-.icon-duplicate{background-position:-396px 0;}
-.icon-duplicate:hover{background-position:-462px 0;}
-.icon-close{background-position:-528px 0;}
-.icon-close:hover{background-position:-594px 0;}
-.icon-delete{background-position:-792px 0;}
-.icon-delete:hover{background-position:-858px 0;}
-.icon-download{background-position:-924px 0;}
-.icon-download:hover{background-position:-990px 0;}
-.icon-edit{background-position:-1056px 0;}
-.icon-edit:hover{background-position:-1122px 0;}
-.icon-error,.icon-error-nohover{background-position:-1188px 0;}
-.icon-error:hover{background-position:-1254px 0;}
-.icon-folder-close{background-position:-1320px 0;}
-.icon-folder-close:hover{background-position:-1386px 0;}
-.icon-folder-open{background-position:-1452px 0;}
-.icon-folder-open:hover{background-position:-1518px 0;}
-.icon-group{background-position:-1584px 0;}
-.icon-group:hover{background-position:-1650px 0;}
-.icon-info{background-position:-1716px 0;}
-.icon-info:hover,.icon-info-nohover{background-position:-1782px 0;}
-.icon-lock{background-position:-1848px 0;}
-.icon-lock:hover{background-position:-1914px 0;}
-.icon-ok,.icon-ok-nohover{background-position:-264px 0;}
-.icon-ok:hover{background-position:-330px 0;}
-.icon-search{background-position:0 -66px;}
-.icon-search:hover{background-position:-66px -66px;}
-.icon-star{background-position:-660px 0;}
-.icon-star:hover{background-position:-726px 0;}
-.icon-preview{background-position:-364px -66px;}
-.icon-preview:hover{background-position:-430px -66px;}
-.icon-printer{background-position:-496px -66px;}
-.icon-printer:hover{background-position:-562px -66px;}
-.icon-help{background-position:-752px -66px;}
-.icon-help:hover{background-position:-818px -66px;}
-.icon-upload{background-position:-884px -66px;}
-.icon-upload:hover{background-position:-950px -66px;}
-.icon-user{background-position:-1016px -66px;}
-.icon-warning,.icon-warning-nohover{background-position:-1148px -66px;}
-.icon-user:hover{background-position:-1082px -66px;}
-.icon-warning:hover{background-position:-1214px -66px;}
-.icon-minimize{background-position:-132px -66px;width:8px;height:8px;}
-.icon-minimize:hover{background-position:-190px -66px;width:8px;height:8px;}
-.icon-expand{background-position:-248px -66px;width:8px;height:8px;}
-.icon-expand:hover{background-position:-306px -66px;width:8px;height:8px;}
+
+.icon-add,.icon-back,.icon-back_disabled,.icon-next,.icon-next_disabled,.icon-calendar,.icon-duplicate,.icon-close,.icon-delete,.icon-download,.icon-edit,.icon-error,.icon-error-nohover,.icon-group,.icon-info,.icon-info-nohover,.icon-lock,.icon-ok,.icon-ok-nohover,.icon-search,.icon-star,.icon-preview,.icon-print,.icon-help,.icon-upload,.icon-user,.icon-warning,.icon-warning-nohover,.icon-minimize,.icon-expand, .icon-folder_closed, .icon-folder_open, .icon-group_perm, .icon-refresh{background:url(../img/icons-common-small.png) no-repeat top left;text-indent:-1999px;overflow:hidden;width:16px;height:16px;display:inline-block;*display:inline;*zoom:1;}
+
+.icon-add{ background-position: 0 0;  } 
+.icon-add:hover{ background-position: 0 -48px;  } 
+.icon-back{ background-position: 0 -96px;  } 
+.icon-back:hover{ background-position: 0 -144px;  } 
+.icon-back_disabled{ background-position: 0 -192px;  } 
+.icon-calendar{ background-position: 0 -240px;  } 
+.icon-calendar:hover{ background-position: 0 -288px;  } 
+.icon-close{ background-position: 0 -384px;  } 
+.icon-close:hover{ background-position: 0 -432px;  } 
+.icon-delete{ background-position: 0 -480px;  } 
+.icon-delete:hover{ background-position: 0 -528px;  } 
+.icon-download{ background-position: 0 -576px;  } 
+.icon-download:hover{ background-position: 0 -624px;  } 
+.icon-duplicate{ background-position: 0 -336px;  } 
+.icon-duplicate:hover{ background-position: 0 -672px;  } 
+.icon-edit{ background-position: 0 -720px;  } 
+.icon-edit:hover{ background-position: 0 -768px;  } 
+.icon-error,.icon-error-nohover{ background-position: 0 -816px;  } 
+.icon-error:hover{ background-position: 0 -864px;  } 
+.icon-expand{ background-position: 0 -912px;  } 
+.icon-expand:hover{ background-position: 0 -952px;  } 
+.icon-folder_closed{ background-position: 0 -992px;  } 
+.icon-folder_closed:hover{ background-position: 0 -1040px;  } 
+.icon-folder_open{ background-position: 0 -1088px;  } 
+.icon-folder_open:hover{ background-position: 0 -1136px;  } 
+.icon-group_perm{ background-position: 0 -1184px;  } 
+.icon-group_perm:hover{ background-position: 0 -1232px;  } 
+.icon-help{ background-position: 0 -1280px;  } 
+.icon-help:hover{ background-position: 0 -1328px;  } 
+.icon-info, .icon-info-nohover{ background-position: 0 -1376px;  } 
+.icon-info:hover{ background-position: 0 -1424px;  } 
+.icon-lock{ background-position: 0 -1472px;  } 
+.icon-lock:hover{ background-position: 0 -1520px;  } 
+.icon-minimize{ background-position: 0 -1568px; height: 8px; width: 8px;  } 
+.icon-minimize:hover{ background-position: 0 -1608px; height: 8px; width: 8px; } 
+.icon-next{ background-position: 0 -1648px;  } 
+.icon-next:hover{ background-position: 0 -1696px;  } 
+.icon-next_disabled{ background-position: 0 -1744px;  } 
+.icon-ok, .icon-ok-nohover{ background-position: 0 -1792px;  } 
+.icon-ok:hover{ background-position: 0 -1840px;  } 
+.icon-preview{ background-position: 0 -1888px;  } 
+.icon-preview:hover{ background-position: 0 -1936px;  } 
+.icon-print:hover{ background-position: -48px 0;  } 
+.icon-printer{ background-position: -48px -48px;  } 
+.icon-refresh{ background-position: -48px -96px;  } 
+.icon-refresh:hover{ background-position: -48px -144px;  } 
+.icon-search{ background-position: -48px -192px;  } 
+.icon-search:hover{ background-position: -48px -240px;  } 
+.icon-star{ background-position: -48px -288px;  } 
+.icon-star:hover{ background-position: -48px -336px;  } 
+.icon-upload{ background-position: -48px -384px;  } 
+.icon-upload:hover{ background-position: -48px -432px;  } 
+.icon-user{ background-position: -48px -480px;  } 
+.icon-user:hover{ background-position: -48px -528px;  } 
+.icon-warning,.icon-warning-nohover{ background-position: -48px -576px;  } 
+.icon-warning:hover{ background-position: -48px -624px;  } 
+
+

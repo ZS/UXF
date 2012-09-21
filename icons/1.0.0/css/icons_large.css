@@ -1,0 +1,60 @@
+@charset "utf-8";
+.icon-add,.icon-back,.icon-back_disabled,.icon-next,.icon-next_disabled,.icon-calendar,.icon-duplicate,.icon-close,.icon-delete,.icon-download,.icon-edit,.icon-error,.icon-error-nohover,.icon-group,.icon-info,.icon-info-nohover,.icon-lock,.icon-ok,.icon-ok-nohover,.icon-search,.icon-star,.icon-preview,.icon-print,.icon-help,.icon-upload,.icon-user,.icon-warning,.icon-warning-nohover,.icon-minimize,.icon-expand, .icon-folder_closed, .icon-folder_open, .icon-group_perm, .icon-refresh{background:url(../img/icons-common-large.png) no-repeat top left;text-indent:-1999px;overflow:hidden;width:32px;height:32px;display:inline-block;*display:inline;*zoom:1;}
+
+.icon-add{ background-position: 0 0; } 
+.icon-add:hover{ background-position: 0 -82px; } 
+.icon-back{ background-position: 0 -164px;} 
+.icon-back:hover{ background-position: 0 -245px;  } 
+.icon-back_disabled{ background-position: 0 -326px; } 
+.icon-calendar{ background-position: 0 -408px; } 
+.icon-calendar:hover{ background-position: 0 -490px; } 
+.icon-close{ background-position: 0 -572px; } 
+.icon-close:hover{ background-position: 0 -654px; } 
+.icon-delete{ background-position: 0 -736px; } 
+.icon-delete:hover{ background-position: 0 -818px; } 
+.icon-download{ background-position: 0 -900px; } 
+.icon-download:hover{ background-position: 0 -982px; } 
+.icon-duplicate{ background-position: 0 -1064px; } 
+.icon-duplicate:hover{ background-position: 0 -1146px; } 
+.icon-edit{ background-position: 0 -1228px; } 
+.icon-edit:hover{ background-position: 0 -1310px; } 
+.icon-error,.icon-error-nohover{ background-position: 0 -1392px; } 
+.icon-error:hover{ background-position: 0 -1474px; } 
+.icon-expand{ background-position: 0 -1556px; width: 16px; height: 16px; } 
+.icon-expand:hover{ background-position: 0 -1622px; width: 16px; height: 16px; } 
+.icon-folder_closed{ background-position: 0 -1688px; } 
+.icon-folder_closed:hover{ background-position: 0 -1770px; } 
+.icon-folder_open{ background-position: 0 -1852px; } 
+.icon-folder_open:hover{ background-position: 0 -1934px; } 
+.icon-group_perm{ background-position: -82px 0; } 
+.icon-group_perm:hover{ background-position: -82px -82px; } 
+.icon-help{ background-position: -82px -164px; } 
+.icon-help:hover{ background-position: -82px -246px; } 
+.icon-info, .icon-info-nohover{ background-position: -82px -328px; } 
+.icon-info:hover{ background-position: -82px -410px; } 
+.icon-lock{ background-position: -82px -492px; } 
+.icon-lock:hover{ background-position: -82px -574px; } 
+.icon-minimize{ background-position: -82px -656px; width: 16px; height: 16px; } 
+.icon-minimize:hover{ background-position: -82px -722px; width: 16px; height: 16px; } 
+.icon-next{ background-position: -82px -788px; } 
+.icon-next:hover{ background-position: -82px -870px; } 
+.icon-next_disabled{ background-position: -82px -951px; } 
+.icon-ok, .icon-ok-nohover{ background-position: -82px -1033px; } 
+.icon-ok:hover{ background-position: -82px -1115px; } 
+.icon-preview{ background-position: -82px -1197px; } 
+.icon-preview:hover{ background-position: -82px -1279px; } 
+.icon-print:hover{ background-position: -82px -1361px; } 
+.icon-print{ background-position: -82px -1443px; } 
+.icon-refresh{ background-position: -82px -1525px; } 
+.icon-refresh:hover{ background-position: -82px -1607px; } 
+.icon-search{ background-position: -82px -1689px; } 
+.icon-search:hover{ background-position: -82px -1771px; } 
+.icon-star{ background-position: -82px -1853px; } 
+.icon-star:hover{ background-position: -82px -1935px; } 
+.icon-upload{ background-position: -164px 0; } 
+.icon-upload:hover{ background-position: -164px -82px; } 
+.icon-user{ background-position: -164px -164px; } 
+.icon-user:hover{ background-position: -164px -246px; } 
+.icon-warning,.icon-warning-nohover{ background-position: -164px -328px; } 
+.icon-warning:hover{ background-position: -164px -410px; } 
+
