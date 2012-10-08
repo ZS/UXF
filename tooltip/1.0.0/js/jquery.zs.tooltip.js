@@ -3,79 +3,105 @@
  * Author: Alan Kendall
  * Version: 1.0.0
  * Dependencies:
- *    jquery.qtip.js
- *    jquery.qtip.css
+ *    jquery.attribute-observer.js
+ *    jquery.qtip2.js
+ *    jquery.qtip2.css
  *    jquery.zs.tooltip.css
  */
-;(function ($, window, document, undefined) {
+;(function($, window, document, undefined) {
+    var ATTR_WARN = 'warning-text';
+    var ATTR_ERR = 'error-text';
+    var ATTR_TITLE = 'title';
+    var ATTR_OLDTITLE = 'oldtitle';
+    
+    // Private settings that cannot be overridden
+    var settings = {
+        style: {
+            tip: {
+                width: 14,
+                height: 8
+            },
+            classes: ''
+        },
+        show: {
+            event: 'click mouseenter'
+        },
+        hide: {
+            event: 'mouseleave'
+        },
+        events: {
+            visible: function(event, api) {
+                $(document).one('touchstart', function() {
+                    $('.qtip.ui-tooltip').has(':visible').qtip('api').hide();
+                });
+            }
+        }
+    };
+    
+    // Overridable
     var defaults = {
         content: {
             text: function(api) {
                 var elem = $(this),
                     attrText;
-                
                 // Searches for any of these attributes on the triggering element, and uses the value of the first one it finds.
-                // "oldtitle" is what qtip renames the title attribute to, if it was present.
-                $.each(["error-text", "warning-text", "oldtitle"], function(index, value) {
-                    if (elem.is("[" + value + "]")) {
-                        attrText = elem.attr(value);
+                // 'oldtitle' is what qtip renames the title attribute to, if it was present.
+                $.each([ATTR_ERR, ATTR_WARN, ATTR_OLDTITLE], function(index, value) {
+                    if (elem.is('[' + value + ']')) {
+                        attrText = elem.attr(value);    // Might need to use elem.prop() for IE7, IE8
                         return false;
                     }
                 });
-
                 return attrText;
             },
             title: false
         },
-        style: {
-            tip: {
-                width: 14,
-                height: 8
-            }
-        },
         position: {
-            my: "bottom middle",
-            at: "top middle",
+            my: 'bottom middle',
+            at: 'top middle',
             viewport: $(window),
             adjust: { x: 0, y: 0 }
-        },
-        show: {
-            event: "click mouseenter"
-        },
-        hide: {
-            event: "mouseleave"
-        },
-        events: {
-            visible: function(event, api) {
-                $(document).one("touchstart", function() {
-                    $(".qtip.ui-tooltip").has(":visible").qtip("api").hide();
-                });
-            }
         }
     };
 
     $.fn.ZSTooltip = function (options) {
-        var localOptions, elem, classes, cls;
-
+        var localOptions, elem;
         return this.each(function () {
             elem = $(this),
             
             // Users may pass in any combination of params, so do a deep object copy to merge it all together
-            localOptions = $.extend(true, {}, defaults, options);
-            classes = localOptions.style.classes || "";
-            cls = "zs-tooltip-default";
+            // Private settings are always applied last, and override anything the user tried to pass in
+            localOptions = $.extend(true, {}, defaults, options, settings);
+            localOptions.style.classes = getStyleClasses(elem);
             
-            $.each([{ attr: "error-text", cls: "zs-tooltip-error" },
-                    { attr: "warning-text", cls: "zs-tooltip-warning" }], function(index, value) {
-                if (elem.is("[" + value.attr + "]")) {
-                    cls = value.cls;
+            // Listen for the attribute change, and adjust the styles as needed
+            elem.attrObserver(function(attrName, attrValue) {
+                if (attrName === ATTR_ERR || attrName === ATTR_WARN || attrName === ATTR_TITLE) {
+                    var source = $(this);
+                    source.qtip('option', 'style.classes', getStyleClasses(source));
                 }
             });
-
-            localOptions.style.classes = classes + " zs-tooltip " + cls;
-
+            
             elem.qtip(localOptions);
         });
     };
     
-})( jQuery, window, document );
+    getStyleClasses = function(elem) {
+        // The default style is the 'info' blue
+        var cls = 'zs-tooltip-default';
+        
+        // Check to see if the trigger element for this tooltip instance provided the warn/err attributes,
+        // and if so, apply the approviate pre-defined warn/err style
+        $.each([{ attr: ATTR_ERR, cls: 'zs-tooltip-error' },
+                { attr: ATTR_WARN, cls: 'zs-tooltip-warning' }], function(index, value) {
+            if (elem.is('[' + value.attr + ']')) {
+                cls = value.cls;
+                return false;
+            }
+        });
+        // The base class is always present
+        cls += ' zs-tooltip'
+        return cls;
+    };
+    
+})(jQuery, window, document);
