@@ -28,7 +28,7 @@
         }
         p.setAttribute('id', 'target');
         return flag;
-    }
+    };
 
     $.fn.attrObserver = function(callback) {
         if (MutationObserver) {

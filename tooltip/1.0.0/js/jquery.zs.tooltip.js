@@ -86,7 +86,7 @@
         });
     };
     
-    getStyleClasses = function(elem) {
+    var getStyleClasses = function(elem) {
         // The default style is the 'info' blue
         var cls = 'zs-tooltip-default';
         
