@@ -100,7 +100,7 @@
             }
         });
         // The base class is always present
-        cls += ' zs-tooltip'
+        cls += ' zs-tooltip';
         return cls;
     };
     
