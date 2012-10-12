@@ -8,8 +8,6 @@
  *    jquery.qtip2.css
  *    jquery.zs.tooltip.css
  *
- * This is a test -- did you get it?
- * Another test.
  */
 ;(function($, window, document, undefined) {
     var ATTR_WARN = 'warning-text';
