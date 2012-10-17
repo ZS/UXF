@@ -1,12 +1,12 @@
 ﻿/*!
- * ZS Tooltip
+ * UXF Tooltip
  * Author: Alan Kendall
  * Version: 1.0.0
  * Dependencies:
  *    jquery.attribute-observer.js
  *    jquery.qtip2.js
  *    jquery.qtip2.css
- *    jquery.zs.tooltip.css
+ *    jquery.uxf.tooltip.css
  *
  */
 ;(function($, window, document, undefined) {
@@ -65,7 +65,7 @@
         }
     };
 
-    $.fn.ZSTooltip = function (options) {
+    $.fn.UXFTooltip = function (options) {
         var localOptions, elem;
         return this.each(function () {
             elem = $(this),
@@ -89,19 +89,19 @@
     
     var getStyleClasses = function(elem) {
         // The default style is the 'info' blue
-        var cls = 'zs-tooltip-default';
+        var cls = 'uxf-tooltip-default';
         
         // Check to see if the trigger element for this tooltip instance provided the warn/err attributes,
         // and if so, apply the approviate pre-defined warn/err style
-        $.each([{ attr: ATTR_ERR, cls: 'zs-tooltip-error' },
-                { attr: ATTR_WARN, cls: 'zs-tooltip-warning' }], function(index, value) {
+        $.each([{ attr: ATTR_ERR, cls: 'uxf-tooltip-error' },
+                { attr: ATTR_WARN, cls: 'uxf-tooltip-warning' }], function(index, value) {
             if (elem.is('[' + value.attr + ']')) {
                 cls = value.cls;
                 return false;
             }
         });
         // The base class is always present
-        cls += ' zs-tooltip';
+        cls += ' uxf-tooltip';
         return cls;
     };
     
