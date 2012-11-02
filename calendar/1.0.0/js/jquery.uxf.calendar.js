@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 * UXF Calndar
 * Author: Mike Amara
 * Version: 1.0.0
@@ -63,11 +63,11 @@ jQuery.extend({
 
     UXFLang['fr'] = {
         closeText: 'Fermer',
-        prevText: 'Pr�c�dent',
+        prevText: 'Précédent',
         nextText: 'Suivant',
         currentText: 'Aujourd\'hui',
-        monthNames: ['Janvier', 'F�vrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Ao�t', 'Septembre', 'Octobre', 'Novembre', 'D�cembre'],
-        monthNamesShort: ['Janv.', 'F�vr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Ao�t', 'Sept.', 'Oct.', 'Nov.', 'D�c.'],
+        monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+        monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
         dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
         dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
         dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
@@ -86,7 +86,7 @@ jQuery.extend({
         currentText: 'Oggi',
         monthNames: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
         monthNamesShort: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'],
-        dayNames: ['Domenica', 'Luned�', 'Marted�', 'Mercoled�', 'Gioved�', 'Venerd�', 'Sabato'],
+        dayNames: ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'],
         dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'],
         dayNamesMin: ['Do', 'Lu', 'Ma', 'Me', 'Gi', 'Ve', 'Sa'],
         weekHeader: 'Sm',
@@ -98,12 +98,12 @@ jQuery.extend({
     };
 
     UXFLang['de'] = {
-        closeText: 'schlie�en',
-        prevText: '&#x3C;zur�ck',
+        closeText: 'schließen',
+        prevText: '&#x3C;zurück',
         nextText: 'Vor&#x3E;',
         currentText: 'heute',
-        monthNames: ['Januar', 'Februar', 'M�rz', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
-        monthNamesShort: ['Jan', 'Feb', 'M�r', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+        monthNames: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+        monthNamesShort: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
         dayNames: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
         dayNamesShort: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
         dayNamesMin: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
@@ -122,9 +122,9 @@ jQuery.extend({
         currentText: 'Hoy',
         monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
         monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-        dayNames: ['Domingo', 'Lunes', 'Martes', 'Mi�rcoles', 'Jueves', 'Viernes', 'S�bado'],
-        dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mi�', 'Juv', 'Vie', 'S�b'],
-        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'S�'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
         weekHeader: 'Sm',
         dateFormat: 'dd/mm/yy',
         firstDay: 1,
@@ -134,41 +134,39 @@ jQuery.extend({
     };
 
     UXFLang['ja'] = {
-        closeText: '???',
-        prevText: '&#x3C;?',
-        nextText: '?&#x3E;',
-        currentText: '??',
-        monthNames: ['1?', '2?', '3?', '4?', '5?', '6?', '7?', '8?', '9?', '10?', '11?', '12?'],
-        monthNamesShort: ['1?', '2?', '3?', '4?', '5?', '6?', '7?', '8?', '9?', '10?', '11?', '12?'],
-        dayNames: ['???', '???', '???', '???', '???', '???', '???'],
-        dayNamesShort: ['?', '?', '?', '?', '?', '?', '?'],
-        dayNamesMin: ['?', '?', '?', '?', '?', '?', '?'],
-        weekHeader: '?',
+        closeText: '閉じる',
+        prevText: '&#x3C;前',
+        nextText: '次&#x3E;',
+        currentText: '今日',
+        monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+        monthNamesShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+        dayNames: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
+        dayNamesShort: ['日', '月', '火', '水', '木', '金', '土'],
+        dayNamesMin: ['日', '月', '火', '水', '木', '金', '土'],
+        weekHeader: '週',
         dateFormat: 'yy/mm/dd',
         firstDay: 0,
         isRTL: false,
         showMonthAfterYear: true,
-        yearSuffix: '?'
+        yearSuffix: '年'
     };
 
     UXFLang['zh-CN'] = {
-        closeText: '??',
-        prevText: '&#x3C;??',
-        nextText: '??&#x3E;',
-        currentText: '??',
-        monthNames: ['??', '??', '??', '??', '??', '??',
-    '??', '??', '??', '??', '???', '???'],
-        monthNamesShort: ['??', '??', '??', '??', '??', '??',
-    '??', '??', '??', '??', '???', '???'],
-        dayNames: ['???', '???', '???', '???', '???', '???', '???'],
-        dayNamesShort: ['??', '??', '??', '??', '??', '??', '??'],
-        dayNamesMin: ['?', '?', '?', '?', '?', '?', '?'],
-        weekHeader: '?',
+        closeText: '关闭',
+        prevText: '&#x3C;上月',
+        nextText: '下月&#x3E;',
+        currentText: '今天',
+        monthNames: ['一月', '二月', '三月', '四月', '五月', '六月','七月', '八月', '九月', '十月', '十一月', '十二月'],
+        monthNamesShort: ['一月', '二月', '三月', '四月', '五月', '六月','七月', '八月', '九月', '十月', '十一月', '十二月'],
+        dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+        dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+        dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+        weekHeader: '周',
         dateFormat: 'yy-mm-dd',
         firstDay: 1,
         isRTL: false,
         showMonthAfterYear: true,
-        yearSuffix: '?'
+        yearSuffix: '年'
     };
 
     var settings = {
