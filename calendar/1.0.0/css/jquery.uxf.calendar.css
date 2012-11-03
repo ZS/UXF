@@ -1,8 +1,8 @@
 #calendarContainer{ background: #fff;}
-.ui-widget-content{padding:5px;background:#fff url(../img/calendarbg.png) repeat-x bottom;border: 1px solid #ccc;box-shadow: 0px 0px 10px rgba(0,0,0,0.25);-moz-box-shadow: 0px 0px 10px rgba(0,0,0,0.25);-webkit-box-shadow: 2px 2px 10px rgba(0,0,0,0.25);-moz-border-radius: 4px;-webkit-border-radius: 4px;-khtml-border-radius: 4px;border-radius: 4px;}
+.ui-widget-content{padding:5px;background:#fff url(calendar/1.0.0/img/calendarbg.png) repeat-x bottom;border: 1px solid #ccc;box-shadow: 0px 0px 10px rgba(0,0,0,0.25);-moz-box-shadow: 0px 0px 10px rgba(0,0,0,0.25);-webkit-box-shadow: 2px 2px 10px rgba(0,0,0,0.25);-moz-border-radius: 4px;-webkit-border-radius: 4px;-khtml-border-radius: 4px;border-radius: 4px;}
 
 .ui-widget-header .ui-icon,.ui-icon {
-    background-image:url(../img/icons-common-small.png);
+    background-image:url(icons/1.0.0/img/icons-common-small.png);
     background-color:transparent;
 }
 
@@ -32,13 +32,13 @@ a.ui-datepicker-prev-hover span.ui-icon-circle-triangle-w,a.ui-datepicker-next-h
 .ui-datepicker td span, .ui-datepicker td a{text-align:center;padding: 0.34em;}
 
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default{
-background: #e6e6e6 url(../img/date.png) 50% 50% repeat-x;border-top: 1px solid #b0b0b0;border-left: 1px solid #b0b0b0;
+background: #e6e6e6 url(calendar/1.0.0/img/date.png) 50% 50% repeat-x;border-top: 1px solid #b0b0b0;border-left: 1px solid #b0b0b0;
 }
 .ui-priority-secondary, .ui-widget-content .ui-priority-secondary, .ui-widget-header .ui-priority-secondary{
 background:transparent;border: 0px;
 }
 
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active{background: #e6e6e6 url(../img/seldate.png) 50% 50% repeat-x;color:white;}
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active{background: #e6e6e6 url(calendar/1.0.0/img/seldate.png) 50% 50% repeat-x;color:white;}
 td.ui-state-disabled span.ui-state-default{background:transparent;color: #777;border: 1px solid transparent;}
 .ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled{background: transparent;opacity:1.0;}
 
@@ -48,7 +48,7 @@ td.ui-state-disabled span.ui-state-default{background:transparent;color: #777;bo
 
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {background: #abc3e2;border:1px solid #abc3E2;}
 .ui-datepicker-today .ui-state-highlight{border:1px solid #3e73bf;background: #fff;color:#777;}
-.ui-datepicker-today .ui-state-hover{border:1px solid #3e73bf;background: #e6e6e6 url(../img/seldate.png) 50% 50% repeat-x;color:white;}
+.ui-datepicker-today .ui-state-hover{border:1px solid #3e73bf;background: #e6e6e6 url(calendar/1.0.0/seldate.png) 50% 50% repeat-x;color:white;}
 
 .ui-datepicker-header .ui-state-hover{background:transparent;border:0px;}
 
@@ -123,7 +123,7 @@ body.hideDays .ui-datepicker-calendar {display: none;}
     .ui-datepicker-multi-3 .ui-datepicker-group { width:33.3%; }
     .ui-widget-header .ui-icon, .ui-icon {
         background-color: transparent;
-        background-image: url(../img/icons-common-large.png);
+        background-image: url(icons/1.0.0/img/icons-common-large.png);
     }
     .ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span{}
     span.ui-icon-circle-triangle-e {
@@ -174,13 +174,13 @@ body.hideDays .ui-datepicker-calendar {display: none;}
         height: 21px;        
     }
 
-    .ui-datepicker-today .ui-state-hover{border:1px solid #3e73bf;background-color: #e6e6e6;background-image:  url(../img/seldate.png);background-position:  50% 50% repeat-x;color:white;}
+    .ui-datepicker-today .ui-state-hover{border:1px solid #3e73bf;background-color: #e6e6e6;background-image:  url(calendar/1.0.0/img/seldate.png);background-position:  50% 50% repeat-x;color:white;}
     
     .ui-datepicker .ui-datepicker-header { position:relative; padding:.3em 0; }
     
     .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default{
         background-color: #e6e6e6;
-        background-image: url(../img/date.png);
+        background-image: url(calendar/1.0.0/img/date.png);
         background-position: 50% 50% repeat-x;
         background-size: 1px 38px;
         border-bottom: 1px solid #b0b0b0;
@@ -192,7 +192,7 @@ body.hideDays .ui-datepicker-calendar {display: none;}
     .ui-priority-secondary, .ui-widget-content .ui-priority-secondary, .ui-widget-header .ui-priority-secondary{
         background:transparent;border: 0px;
     }
-    .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active{background-color: #e6e6e6;background-image: url(../img/seldate.png);background-position:  50% 50% repeat-x;color:white;}
+    .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active{background-color: #e6e6e6;background-image: url(calendar/1.0.0/img/seldate.png);background-position:  50% 50% repeat-x;color:white;}
     
     .ui-datepicker .ui-datepicker-title {
         color: #333333;
