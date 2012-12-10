@@ -1,0 +1,808 @@
+﻿/**************************************************************************
+/* javelin.css
+/* $Rev: 244 $
+/*************************************************************************/
+
+/**************************************************************************
+/*= General styles
+/*************************************************************************/
+body, input, textarea {
+	font-family: Tahoma, Sans-Serif;
+	font-size: 8pt;
+	line-height: 1.25;
+}
+
+body {
+    min-width: 600px;
+}
+
+.disabled,
+.disabled * {
+	color: #808080;
+}
+
+.hidden {
+    display: none;
+}
+
+em {
+    font-weight: bold;
+}
+
+/**************************************************************************
+/*= Links
+/*************************************************************************/
+a {
+	color: #3577C9;
+}
+
+a:link, a:visited {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;	
+}
+
+a.delete, a.delete:link, a.delete:visited, input.delete {
+	color: #CC0000;
+}
+
+/**************************************************************************
+/*= Link buttons
+/*************************************************************************/
+a.linkbutton, a.linkbutton:link, a.linkbutton:visited {
+	border: 1px solid;
+	border-top-color: #BFD6F1;
+	border-left-color: #BFD6F1;
+	border-bottom-color: #9EBCE1;
+	border-right-color: #9EBCE1;
+	padding: 2px 7px;
+	background-color: #FFF;
+	text-decoration: none;
+	cursor: pointer;
+	margin-left : 5px
+}
+
+a.linkbutton:hover {
+	background-color: #BFD6F1;
+	color: #000;
+	text-decoration: none !important;
+}
+
+/**************************************************************************
+/*= Form Elements 
+/*************************************************************************/
+/* Buttons */
+input[type="button"],
+input[type="submit"] {
+    font-weight: bold;
+    height: 2.6em;
+    padding: 0 1.25em;
+}
+
+input[type="button"].small,
+input[type="submit"].small {
+    /* Save, Cancel, Reset, etc */
+    width: 7.5em;
+}
+
+/* Text fields */
+input[type="text"] {
+    padding: 0.3em;
+}
+
+input[type="text"].very-small {
+    width: 4em; /* ~50px, 6 chars wide */
+}
+
+input[type="text"].small {
+    width: 8.5em; /* ~100px, 13 chars wide */
+}
+
+input[type="text"].medium {
+    width: 15.5em; /* ~175px, 27 chars wide */
+}
+
+input[type="text"].large {
+    width: 22em; /* ~245px, 38 chars wide */
+}
+
+/**************************************************************************
+/*= Colored Boxes
+/*************************************************************************/
+div.box-yellow {
+    background-color: #FCFCEE;
+    border: solid 1px #E9E991;
+    color: #727206;
+    padding: 10px;
+}
+
+div.box-green {
+    background-color: #E8F6EE;
+    border: solid 1px #1EAA57;
+    color: #067334;
+    padding: 10px;
+}
+
+/**************************************************************************
+/*= Action List 
+/*************************************************************************/
+ul.action-list {
+	padding-top: 10px;
+	border-bottom: 1px solid #EAEAEA;
+}
+
+ul.action-list h2  {
+	color: #666;
+	font-size: 14pt;
+	font-family: Arial, Helvetica, Sans-Serif;
+	/* The characters in the header text are shifted to the right about
+	2px because of the larger font size.  This will fix it but is
+	kind of a hack because negative margins may have unpredictable behavior.
+	margin-left: -2px;
+	*/
+}
+
+ul.action-list li {
+	padding-bottom: 10px;
+}
+
+ul.action-list em {
+	font-weight: bold;
+}
+
+/**************************************************************************
+/*= Action Box 
+/*************************************************************************/
+.action-box {
+	background-color: #FCFCEE;
+	border: 1px solid #E9E991;
+	width: 180px;
+	padding: 0 15px;		
+}
+
+.action-box ul.action-list h2 {
+	color: #727206;
+}
+
+ul.last-set.action-list {
+	border-bottom: none;
+	margin-bottom: 5px;
+}
+
+/**************************************************************************
+/*= Message List and Statuses
+/*************************************************************************/
+ul.message-list li {
+    padding-top: 0.2em;
+    padding-bottom: 0.1em;
+    margin-top: 0.2em;
+    margin-bottom: 0.1em;
+}
+
+ul.message-list li.status-error,
+ul.message-list.status-error {
+    background: url(../img/error.gif) center left no-repeat;
+    padding-left: 20px;
+}
+
+ul.message-list li.status-warning {
+    background: url(../img/warning.gif) center left no-repeat;
+    padding-left: 20px;
+}
+
+ul.message-list li.status-unknown {
+    background: url(../img/unknown.gif) center left no-repeat;
+    padding-left: 20px;
+}
+
+ul.message-list li.status-ok,
+ul.message-list.status-ok {
+    background: url(../img/ok.gif) center left no-repeat;
+    padding-left: 20px;
+}
+
+/**************************************************************************
+/*= Search Box 
+/*************************************************************************/
+div.search-box input[type="text"] {
+    background: #FFF url(../img/search.gif) no-repeat 2px 60%;
+    padding-left: 22px;
+}
+
+div.search-box input[type="text"].sample-text {
+    color: #808080;
+}
+
+/**************************************************************************
+/*= Link & Linkbutton Menus
+/*************************************************************************/
+ul.link-menu li {
+	display: inline;
+	background: url(../img/divider.gif) center right no-repeat;
+	margin-right: 7px;
+	padding-right: 11px;
+}
+
+ul.link-menu li.last-one {
+	background: none;
+	margin-right: 0px;
+	padding-right: 0px;
+}
+
+ul.linkbutton-menu li {
+	display: inline;
+	margin-right: 7px;
+}
+
+/**************************************************************************
+/*= Navigation Header, Tabs, and Breadcrumbs
+/*************************************************************************/
+div#top-nav div#top-nav-main {
+	background: #306BB5 url(../img/javelin-header-bg.gif) 100% 0 repeat-x;
+	height: 60px;
+	color: #FFF;
+	position: relative;
+}
+
+div#top-nav div#top-nav-main img {
+	position: absolute;
+	right: 0;
+}
+
+div#top-nav div#top-nav-main ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	white-space: nowrap;
+	position: absolute;
+	bottom: 0;
+	left: 10px;
+}
+
+div#top-nav div#top-nav-main li {
+	display: inline-block;
+	border: 1px solid #274E7F;
+	background: #749ED1 url(../img/nav-tab-bg.gif) 100% -100px no-repeat;
+	/* Setting a negative right margin collapses the tabs so that they are 1px apart instead of 3px
+	margin-right: -2px;
+	*/
+}
+
+div#top-nav div#top-nav-main li a {
+	display: block;
+	background: #749ED1 url(../img/nav-tab-bg.gif) 0 -100px no-repeat;
+	color: #FFF;
+	padding: 6px 20px 6px 19px;
+	text-align: center;
+	/* Setting the width creates navigation tabs with fixed widths
+	width: 7em;
+	*/
+}
+
+div#top-nav div#top-nav-main li a:hover {
+	background-position: 0 -200px;	
+}
+
+div#top-nav div#top-nav-main li.current {
+	border: 1px solid #274E7F;
+	border-bottom: 1px solid #FEFEFE;
+	background-color: #EEE;
+	background-position: 100% 0;
+}
+
+div#top-nav div#top-nav-main li.current a,
+div#top-nav div#top-nav-main li.current a:hover {
+	background-position: 0 0;
+	color: #666;
+	background-color: #EEE;
+}
+
+div#top-nav div#top-nav-sub {
+	position: relative;
+	background: #eee url(../img/nav-subheader-bg.gif) 0 100% repeat-x;
+	color: #666;
+	/* The 9em padding on the right side is to provide space for the
+	absolute-positioned Help and About links
+	*/
+	padding: 6px 9em 8px 20px;
+}
+
+ul.breadcrumb li {
+	display: inline;
+	margin-right: 4px;
+	padding-right: 14px;
+	background-image: url(../img/breadcrumb-arrow.gif);
+	background-repeat: no-repeat;
+	background-position: right center;
+}
+
+ul.breadcrumb li.current {
+	background: none;
+	/* Makes sure that the current text is gray even if the breadcrumb
+	style is used outside of the navigation header.
+	*/
+	color: #666;
+}
+
+div#top-nav div#top-nav-sub ul#top-nav-sub-right {
+	position: absolute;
+	top: 6px;
+	right: 15px;
+}
+
+/**************************************************************************
+/*= Left-Side Navigation (typically admin navigation)
+/*************************************************************************/
+body.left-nav-body {
+    background: url(../img/nav-left-back.gif) repeat-y;
+}
+
+div.left-nav-content {
+    margin-left: 190px;
+    padding: 10px;
+}
+
+div#left-nav {
+    display: inline-block;
+    position: relative;
+    float: left;    
+    background: url(../img/nav-left-top.gif) no-repeat 100% 0;
+    top: -2px;
+    width: 182px;
+    padding: 2px 8px 0px 0px;
+}
+
+/* The > makes IE6 barf */
+div#left-nav li > a,
+div#left-nav li > p {
+    display: block;
+    border-top: 1px solid #FFF;
+    font-weight: bold;
+    padding: 5px 10px 5px 20px;
+    width: 152px;
+}
+
+div#left-nav li > p {
+    color: #011E42;
+}
+
+div#left-nav li.disabled > p {
+    color: #808080;
+}
+
+/* The 'current' class and the 'toggle-' classes are mutually exclusive.
+   You can't use both at once and they will not play well together. */
+div#left-nav li.current > a,
+div#left-nav li.current > p {
+    background: #DAE5F1 url(../img/nav-left-current.gif) no-repeat 100% 0;
+}
+
+div#left-nav li.current > p {
+    color: #011E42;
+}
+
+div#left-nav li.toggle-expanded > a {
+    background: url(../img/nav-left-expanded.gif) no-repeat 3px 5px;
+}
+
+div#left-nav li.toggle-collapsed > a {
+    background: url(../img/nav-left-collapsed.gif) no-repeat 3px 5px;
+}
+
+/* Two levels deep */
+div#left-nav li li > a,
+div#left-nav li li > p {
+    border-top: none;
+    font-weight: normal;
+    padding: 3px 10px 3px 30px;
+    width: 142px;
+}
+
+div#left-nav li li.current > a {
+    background: #DAE5F1 url(../img/nav-left-sub-current.gif) no-repeat 100% 0;
+}
+
+div#left-nav li li.toggle-expanded > a {
+    background-position: 18px 3px;
+    padding-left: 35px;
+    width: 137px;
+}
+
+div#left-nav li li.toggle-collapsed > a {
+    background-position: 18px 3px;
+    padding-left: 35px;
+    width: 137px;
+}
+
+/* Three levels deep */
+div#left-nav li li li > a,
+div#left-nav li li li > p {
+    padding-left: 50px;
+    width: 122px;
+}
+
+/* Hover styles */
+div#left-nav li a:hover {
+    color: #1D579F;
+    background-color: #DAE5F1;
+}
+
+div#left-nav li.toggle-expanded > a:hover {
+    background-image: url(../img/nav-left-expanded-hover.gif);
+}
+
+div#left-nav li.toggle-collapsed > a:hover {
+    background-image: url(../img/nav-left-collapsed-hover.gif);
+}
+
+/**************************************************************************
+/*= About Box
+/*************************************************************************/
+#about-box {
+	position: relative;
+	width: 424px;
+	/* Setting the height on this container does not affect the rendering.
+	However it is here as a reminder of how big the About dialog should be.
+	*/
+	height: 204px;
+}
+
+#about-box #version {
+	position: absolute;
+	color: #000;
+	top: 112px;
+	right: 22px;
+}
+
+#about-box div#footer {
+	position: relative;
+	background-color: #E6E6E6;
+	color: #666;
+	height: 44px;
+}
+
+#about-box div#footer p#email-support {
+	position: absolute;
+	top: 6px;
+	left: 8px;
+}
+
+#about-box div#footer p#copyright {
+	position: absolute;
+	top: 24px;
+	left: 8px;
+}
+
+/**************************************************************************
+/*= Fieldsets and divisions
+/*************************************************************************/
+fieldset.division {
+    color: #707070;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top: solid 1px #707070;
+    margin: 0.5em 0;
+}
+
+fieldset.division legend {
+    color: #707070;
+    padding-right: 1em;
+}
+
+/**************************************************************************
+/*= Floating container
+/*************************************************************************/
+div.floating-container {
+	background-image: url(../img/floating-container-bg.jpg);
+	background-repeat: repeat-x;
+	background-position: 0 0;
+	border: 1px solid #E3E3E3;
+}
+
+div.floating-container div.header {
+	border-bottom: 1px solid #E3E3E3;
+	border-top: medium none;
+	color: #333333;
+	font-weight: bold;
+	padding: 7px 45px 7px 10px;
+}
+
+div.floating-container div.content {
+	padding: 15px;
+}
+
+/**************************************************************************
+/*= Big link
+/*************************************************************************/
+p.big-link-text {
+	max-width: 400px;
+	margin: 20px auto 10px auto;
+	text-align: center;
+}
+
+p.big-link {
+	max-width: 400px;
+	margin: 0 auto 25px auto;
+	text-align: center;
+	font-size: 14pt;
+	font-family: Arial, Helvetica, Sans-Serif;
+}
+
+/**************************************************************************
+/*= Data Period Picker
+/*************************************************************************/
+div.data-period {
+    display: inline-block;
+}
+
+div.data-period a.jump-to {
+    font-family: Arial, Tahoma, Sans-Serif;
+    font-size: 14pt;
+    padding: 2px 10px;
+    vertical-align: top;
+}
+
+div.data-period a.prev,
+div.data-period a.next {
+    display: inline-block;
+    position: relative;
+    width: 19px;
+    height: 20px;
+    top: 1px;
+}
+
+div.data-period a.prev.arrow,
+div.data-period a.next.arrow {
+    background-image: url(../img/arrows-next-prev.gif);
+}
+
+div.data-period a.prev.arrow {
+    background-position: 0 0;
+}
+
+div.data-period a.next.arrow {
+    background-position: 100% 0;
+}
+
+div.data-period a.prev.arrow:hover {
+    background-position: 0 40px;
+}
+
+div.data-period a.next.arrow:hover {
+    background-position: 100% 40px;
+}
+
+div.data-period a.prev span,
+div.data-period a.next span {
+    display:none;
+}
+
+/* Styles for a disabled-looking data period (does not actually disable the anchor tags) */
+div.data-period-disabled a.jump-to {
+    color: #C7CFD9;
+}
+
+div.data-period-disabled a.prev.arrow,
+div.data-period-disabled a.prev.arrow:hover {
+    background-position: 0 20px !important;
+}
+
+div.data-period-disabled a.next.arrow,
+div.data-period-disabled a.next.arrow:hover {
+    background-position: 100% 20px !important;
+}
+
+/* Data period list styles (the nav list that comes up when you click the current data period) */
+div#data-period-list {
+    display: none;
+    overflow: auto;
+    z-index: 500;
+    background-color: #FFF;
+    border: solid 1px #3577C9;
+    width: 200px;
+    max-height: 273px; /* 13 list items max (6 before, 6 after) */
+}
+
+div#data-period-list li {
+    display: block;
+    height: 21px;
+    line-height: 21px;
+}
+
+div#data-period-list li.current {
+    font-weight: bold;
+    color: #666;
+    padding-left: 18px;
+}
+
+div#data-period-list li a {
+    display: block;
+    padding-left: 18px;
+    white-space: nowrap;
+}
+
+div#data-period-list li a:hover {
+    background-color: #3577C9;
+    color: #FFF;
+    text-decoration: none;
+}
+
+/**************************************************************************
+/*= Anchored footer
+/*************************************************************************/
+div.anchored-footer-scroll-area {
+    position: absolute;
+    min-width: 26em;
+    top: 0;
+    right: 0;
+    bottom: 5.5em;
+    left: 0;
+    overflow: auto;
+}
+
+div.anchored-footer {
+	position: absolute;
+	min-width: 26em;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 5.5em;
+	overflow: hidden;
+	background: #F5F5F5 url(../img/anchored-footer-bg.gif) repeat-x;
+}
+
+div.anchored-footer.highlight {
+    background: #FFFFCC url(../img/anchored-footer-highlight-bg.gif) repeat-x;
+}
+
+div.anchored-footer input.button {
+    position: relative;
+    float: left;
+    top: 1.5em;
+    margin-left: 0.8em;
+}
+
+/* Right-hand message list styles */
+div.anchored-footer div.message-list-container {
+    display: table;
+    position: absolute;
+    left: 1em;
+    right: 0;
+    height: 100%;
+}
+
+div.anchored-footer.zero-buttons div.message-list-container {
+    left: 0.75em;
+}
+
+div.anchored-footer.one-button div.message-list-container {
+    left: 9.25em;
+}
+
+div.anchored-footer.two-buttons div.message-list-container {
+    left: 17.5em;
+}
+
+div.anchored-footer.three-buttons div.message-list-container {
+    left: 26em;
+}
+
+div.anchored-footer div.message-list-container ul.message-list {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+div.anchored-footer div.message-list-container ul.message-list li {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+div.anchored-footer div.message-list-container ul.message-list li p {
+    white-space: normal;
+    max-height: 5em;
+    margin-right: 2em;
+}
+
+/**************************************************************************
+/*= Tables
+/*************************************************************************/
+
+table.table-default th {
+	border-style: hidden;
+	border-bottom: 1px solid #666;
+	font-weight: bold;
+	white-space: nowrap;
+	color: #808080;
+	padding: .35em 1em;
+	height: 2em;
+}
+
+table.table-default td {
+	border-style: none hidden none hidden;
+	border-bottom: 1px solid #DDDDDD;
+	vertical-align: middle;
+	padding: 0.35em 1em;
+	height: 2em;
+}
+
+table.table-default th p.header-sort-asc {
+    background: url(../img/toggle-up.gif) no-repeat right center;
+    padding-right: 15px;
+    display: inline;
+}
+
+table.table-default th p.header-sort-desc {
+    background: url(../img/toggle-down.gif) no-repeat right center;
+    padding-right: 15px;
+    display: inline;
+}
+
+table.table-default tr.last-row td {
+	border-bottom: none;
+}
+
+table.table-default tr.selected-row {
+	background-color: #E7EFFF;
+}
+
+/* table-default column text-align styles by data type */
+table.table-default td, 
+table.table-default th {
+	text-align: center;
+}
+
+table.table-default td.col-long, 
+table.table-default th.col-long {
+	text-align: left;
+}
+
+table.table-default td.col-numeric, 
+table.table-default th.col-numeric {
+	text-align: right; 
+}
+
+table.table-default td.col-date, 
+table.table-default th.col-date {
+	text-align: left;
+}
+
+table.table-default td.col-checkbox, 
+table.table-default th.col-checkbox {
+	width: 16px;
+}
+
+/* Row modifications (alt, taller) */
+table.table-default tr.row-alt {
+    background-color: #FAFAFA;
+}
+
+table.table-default.row-taller td {
+    height: 2.5em;
+}
+
+/* table-pager */
+table.table-pager td a,
+table.table-pager td span {
+    display: block;
+    text-align: center;
+    padding: 1px 4px;
+    margin-top: 2px;
+    border: 1px solid;
+    border-top-color: #BFD6F1;
+    border-left-color: #BFD6F1;
+    border-bottom-color: #9EBCE1;
+    border-right-color: #9EBCE1;
+}
+
+table.table-pager td span {
+	background: #FFFFCD url(../img/yellow-gradiant-top-down-bg) repeat-x;
+	color: #727206;
+	border: solid 1px #E9E991;
+}
+
+table.table-pager {
+    border-spacing: 2px;
+}
