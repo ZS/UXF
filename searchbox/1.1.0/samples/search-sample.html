@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <link href="../css/jquery.uxf.search.css" rel="stylesheet" type="text/css" />
+        <link REL=StyleSheet type="text/css" href="../css/icons.min.css" MEDIA=screen>
+        <link rel="stylesheet" type="text/css" href="../css/javelin.css">
+        <script type="text/javascript" src="../js/jquery.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.uxf.search.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    </head>
+<body>
+    <style>
+            
+            #search-table{
+                font-family: tahoma,arial;
+                font-size: 11px;
+                width:99%;
+                height:150px;
+                border : 1px solid #c0c0c0;
+                padding:5px;
+                margin:10px;
+            }
+            b
+            {
+                font-size: small;
+                font-weight:bold;
+            }
+            hr
+            {
+                border:1px solid #e0e0e0;
+                
+            }
+            .indent
+            {
+                
+                margin-left:15px;
+            }
+    </style>
+    <h1>Search Box Sample</h1>
+    <table id="search-table">
+        <tr>
+            <td >
+                <p><b>1) Simple search box:</b><br /><br /> 
+                    <div class="indent">
+                    <li>Simple search box comes with a default search button.</li> 
+                    <li>User needs to provide a "search callback" function. On clicking the search button or hitting the &lt;enter&gt; key the search callback function gets triggered.</li>
+                    <li>Note that search action will get triggered only when user has entered a search term in the search box.</li>
+                    <li>User can customize the "width" and the "place holder" of the search box as well. </li>
+                    </div><br /><br /></p>
+                <div class="indent" id="zs-simple-search-container"></div>
+                
+            </td>
+        </tr>
+        <tr>
+            <td  valign="middle" style="border-bottom:1px solid #e0e0e0;"><div class="indent" id="simple-search"></div><br /><br />
+                
+            </td>
+         
+        </tr>
+       
+        <tr>
+            <td >
+                
+                <br />
+                <p><b>2) Live search box:</b><br /><br /> 
+                <div class="indent">
+                    <li>Live search gets triggered as the user starts entering search word(s) in the search box.</li>
+                    <li>User needs to provide the "search callback" function which gets triggered on key-press event.</li> 
+                    <li>User can customize the "width" and the "place holder" of the search box as well.</li>
+                    
+                </div><br /><br /></p>
+                <div class="indent" id="zs-live-search-container"></div>
+            </td>
+             
+        </tr>
+        <tr>
+            
+            <td valign="middle"><div class="indent" id="live-search">&nbsp;</div></td>
+        </tr>        
+    </table>
+    <input type="button" value="show" onclick="testshowLoader()" /> 
+    <input type="button" value="hide" onclick="testhideLoader()" />
+</body>
+<script>
+ var show,hide;                                  
+        function testshowLoader(){
+            show();
+            
+        }
+        function testhideLoader(){
+            hide();
+            
+        }   
+    $(document).ready(function() {   
+        
+        //simple search
+        $('#zs-simple-search-container').UXFSearchBox({
+                                        isLiveSearch:false,                
+                                        searchCallback: function (txt){ // callback function to trigger search
+                                                            //put more meaningful code here
+                                                            $('#simple-search').html('Simple search triggered: <div style="color: green;">' + txt + '</div>');
+                                                        }, 
+                                        placeholder:"test new place holder for search", // put your over text inside search box
+                                        width:400 // adjust width for the search box
+                                    });                      
+        
+        //live search     
+        $('#zs-live-search-container').UXFSearchBox({
+                                            isLiveSearch:true, // search gets triggered on key press
+                                            liveSearchTriggerCount:3,
+                                            loaderObject : function(showLoader, hideLoader){
+                                                show = showLoader;
+                                                hide = hideLoader;
+                                            },
+                                            searchCallback: function (txt){
+                                                                //put more meaningful code here like ajax 
+                                                                $('#live-search').html('Live search triggered: <div style="color: green;">' + txt + '</div>');
+                                                               
+                                                            } // callback function
+                                                            
+                                          });
+                                          
+       
+    });
+    
+    
+</script>
+</html>
