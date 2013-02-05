@@ -1,9 +1,9 @@
 /*!
  * UXF Search Box
  * Author: Chinmay Bokil
- * Version: 1.0.0
+ * Version: 1.1.0
  * Dependencies:
- *    jquery.zs.search.css
+ *    jquery.uxf.search.css
  *    icons.css 
  *    javelin.css
  */
@@ -133,8 +133,9 @@
             searchInput.keyup(function(e){inputCaptured(e)});
             
             var inputCaptured = function(e){
+                enterKeyPressed = (e.keyCode === 13);
                 if(options.isLiveSearch){
-                    enterKeyPressed = (e.keyCode === 13);
+                    
                     if(!printableCharPressed){
                          // skip for "enter", "backspace" and "del"  
                         if(!( enterKeyPressed || e.keyCode === 8 || e.keyCode === 46)){
@@ -153,16 +154,17 @@
                     Cut_or_Paste = false;
                     ctrlPressed = false;
                     
-                    var searchString = $.trim($(e.target).val().toLowerCase());
+                   
+                }  
+                var searchString = $.trim($(e.target).val().toLowerCase());
                      
-                    if (searchString === "") {
+                if (searchString === "") {
                         lastSearchedTerm="";
                         clearIcon.addClass("clear-invisible");
-                    } else {
+                } else {
                         clearIcon.removeClass("clear-invisible");
                        
                         
-                    }
                 }    
                 // check if the key pressed is "enter" key
                 if(options.isLiveSearch || enterKeyPressed){

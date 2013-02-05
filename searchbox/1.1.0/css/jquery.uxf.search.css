@@ -34,6 +34,8 @@
     background: url("../img/spinner.gif") no-repeat;
     pointer-events: none;
     cursor: default;
+    width:18px;
+    height:18px;
 }
 
 .uxf-search-box .clear-invisible
